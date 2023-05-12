@@ -51,6 +51,6 @@ public final class Telephone extends BaseEntity {
 
     @Override
     public String toString() {
-        return "+" + countryCode + " (" + areaCode + ")" + " " + number ;
+        return "+" + countryCode + " (" + areaCode + ")" + " " + number;
     }
 }
