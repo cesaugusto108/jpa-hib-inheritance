@@ -2,7 +2,9 @@ package augusto108.ces.advhibernate.services;
 
 import augusto108.ces.advhibernate.domain.entities.Person;
 import augusto108.ces.advhibernate.repositories.PersonRepository;
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +40,10 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Person getPersonById(Integer id) {
-        return personRepository.getPersonById(id);
+        try {
+            return personRepository.getPersonById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoResultException("No result found for id: " + id);
+        }
     }
 }
