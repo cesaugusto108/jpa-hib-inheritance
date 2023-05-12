@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import java.util.List;
-
 @Configuration
 @PropertySource("classpath:sample-instructor.properties")
 public class InstructorLoad {
@@ -46,10 +44,10 @@ public class InstructorLoad {
         return new Instructor(name, name, email, specialty);
     }
 
-    public List<Telephone> createTelephones() {
-        final Telephone tel1 = new Telephone(countryCode, areaCode, firstPhoneNumber);
-        final Telephone tel2 = new Telephone(countryCode, areaCode, secondPhoneNumber);
-
-        return List.of(tel1, tel2);
+    public Telephone[] createTelephones() {
+        return new Telephone[]{
+                new Telephone(countryCode, areaCode, firstPhoneNumber),
+                new Telephone(countryCode, areaCode, secondPhoneNumber)
+        };
     }
 }
