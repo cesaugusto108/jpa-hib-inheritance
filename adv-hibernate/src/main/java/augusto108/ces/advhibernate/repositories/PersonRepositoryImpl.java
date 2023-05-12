@@ -1,6 +1,8 @@
 package augusto108.ces.advhibernate.repositories;
 
+import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Person;
+import augusto108.ces.advhibernate.domain.entities.Student;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
@@ -21,8 +23,19 @@ public class PersonRepositoryImpl implements PersonRepository {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Person> getPersons(int page, int max) {
-        return entityManager.createNativeQuery("select * from person where person_type = 'student'", Person.class)
+    public List<Person> getStudents(int page, int max) {
+        return entityManager
+                .createNativeQuery("select * from person where person_type = 'student'", Student.class)
+                .setFirstResult(page * max)
+                .setMaxResults(max)
+                .getResultList();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Person> getInstructors(int page, int max) {
+        return entityManager
+                .createNativeQuery("select * from person where person_type = 'instructor'", Instructor.class)
                 .setFirstResult(page * max)
                 .setMaxResults(max)
                 .getResultList();

@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/students")
-public class StudentController {
+@RequestMapping("/instructors")
+public class InstructorController {
     private final PersonService service;
 
-    public StudentController(PersonService service) {
+    public InstructorController(PersonService service) {
         this.service = service;
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Person>> getStudents(
+    public ResponseEntity<List<Person>> getInstructors(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int max
     ) {
-        return ResponseEntity.ok(service.getStudents(page, max));
+        return ResponseEntity.ok(service.getInstructors(page, max));
     }
 }

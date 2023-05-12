@@ -7,5 +7,7 @@ import java.util.List;
 public interface PersonService {
     void persistPerson(Person person);
 
-    List<Person> getPersons(int page, int max);
+    List<Person> getStudents(int page, int max);
+
+    List<Person> getInstructors(int page, int max);
 }

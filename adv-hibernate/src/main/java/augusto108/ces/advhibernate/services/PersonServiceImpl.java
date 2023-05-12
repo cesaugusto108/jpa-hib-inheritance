@@ -22,7 +22,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> getPersons(int page, int max) {
-        return personRepository.getPersons(page, max);
+    public List<Person> getStudents(int page, int max) {
+        return personRepository.getStudents(page, max);
+    }
+
+    @Override
+    public List<Person> getInstructors(int page, int max) {
+        return personRepository.getInstructors(page, max);
     }
 }
