@@ -30,4 +30,9 @@ public class PersonServiceImpl implements PersonService {
     public List<Person> getInstructors(int page, int max) {
         return personRepository.getInstructors(page, max);
     }
+
+    @Override
+    public List<Person> getEmployees(int page, int max) {
+        return personRepository.getEmployees(page, max);
+    }
 }

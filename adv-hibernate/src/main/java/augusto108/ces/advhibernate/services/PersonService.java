@@ -10,4 +10,6 @@ public interface PersonService {
     List<Person> getStudents(int page, int max);
 
     List<Person> getInstructors(int page, int max);
+
+    List<Person> getEmployees(int page, int max);
 }
