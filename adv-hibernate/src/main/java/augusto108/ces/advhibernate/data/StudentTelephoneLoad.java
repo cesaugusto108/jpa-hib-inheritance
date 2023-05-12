@@ -10,8 +10,10 @@ import org.springframework.context.annotation.PropertySource;
 public class StudentTelephoneLoad {
     @Value("${student.telephone.country-code}")
     private String countryCode;
+
     @Value("${student.telephone.area-code}")
     private String areaCode;
+
     @Value("${student.telephone.number}")
     private String number;
 

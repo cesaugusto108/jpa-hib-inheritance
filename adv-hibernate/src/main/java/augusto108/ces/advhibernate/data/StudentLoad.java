@@ -11,12 +11,16 @@ import org.springframework.context.annotation.PropertySource;
 public class StudentLoad {
     @Value("${student.first-name}")
     private String firstName;
+
     @Value("${student.middle-name}")
     private String middleName;
+
     @Value("${student.last-name}")
     private String lastName;
+
     @Value("${student.email}")
     private String email;
+
     @Value("${student.registration}")
     private String registration;
 
