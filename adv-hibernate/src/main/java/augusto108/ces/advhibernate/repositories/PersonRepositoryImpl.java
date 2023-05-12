@@ -51,4 +51,12 @@ public class PersonRepositoryImpl implements PersonRepository {
                 .setMaxResults(max)
                 .getResultList();
     }
+
+    @Override
+    public Person getPersonById(Integer id) {
+        return entityManager
+                .createQuery("from Person p where id = :id", Person.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
 }
