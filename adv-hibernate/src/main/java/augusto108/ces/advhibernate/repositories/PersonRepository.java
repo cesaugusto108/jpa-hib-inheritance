@@ -2,6 +2,10 @@ package augusto108.ces.advhibernate.repositories;
 
 import augusto108.ces.advhibernate.domain.entities.Person;
 
+import java.util.List;
+
 public interface PersonRepository {
     void persistPerson(Person person);
+
+    List<Person> getPersons(int page, int max);
 }
