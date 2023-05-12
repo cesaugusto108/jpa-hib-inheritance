@@ -9,7 +9,7 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Inheritance single table strategy
 @Table(name = "person")
 @DiscriminatorColumn(name = "person_type", discriminatorType = DiscriminatorType.STRING)
-public non-sealed class Person extends BaseEntity {
+public abstract non-sealed class Person extends BaseEntity {
     @Embedded
     private Name name;
 
