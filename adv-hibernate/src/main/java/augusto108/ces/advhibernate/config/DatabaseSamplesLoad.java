@@ -2,7 +2,6 @@ package augusto108.ces.advhibernate.config;
 
 import augusto108.ces.advhibernate.data.InstructorLoad;
 import augusto108.ces.advhibernate.data.StudentLoad;
-import augusto108.ces.advhibernate.data.StudentTelephoneLoad;
 import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Student;
 import augusto108.ces.advhibernate.domain.entities.Telephone;
@@ -17,25 +16,23 @@ public class DatabaseSamplesLoad {
     private final TelephoneService telephoneService;
     private final StudentLoad studentLoad;
     private final InstructorLoad instructorLoad;
-    private final StudentTelephoneLoad telephoneLoad;
 
     public DatabaseSamplesLoad(
             PersonService personService,
             TelephoneService telephoneService,
             StudentLoad studentLoad,
-            InstructorLoad instructorLoad, StudentTelephoneLoad telephoneLoad
+            InstructorLoad instructorLoad
     ) {
         this.personService = personService;
         this.telephoneService = telephoneService;
         this.studentLoad = studentLoad;
         this.instructorLoad = instructorLoad;
-        this.telephoneLoad = telephoneLoad;
     }
 
     @Bean
     void persistStudent() {
         final Student student = studentLoad.createStudent();
-        final Telephone telephone = telephoneLoad.createStudentTelephone();
+        final Telephone telephone = studentLoad.createStudentTelephone();
 
         telephoneService.persistTelephone(telephone);
 
