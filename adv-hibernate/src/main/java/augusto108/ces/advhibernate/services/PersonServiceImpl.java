@@ -1,6 +1,9 @@
 package augusto108.ces.advhibernate.services;
 
+import augusto108.ces.advhibernate.domain.entities.Employee;
+import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Person;
+import augusto108.ces.advhibernate.domain.entities.Student;
 import augusto108.ces.advhibernate.repositories.PersonRepository;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
@@ -19,29 +22,57 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void persistPerson(Person person) {
-        personRepository.persistPerson(person);
+    public void persistStudent(Student student) {
+        personRepository.persistStudent(student);
     }
 
     @Override
-    public List<Person> getStudents(int page, int max) {
+    public void persistInstructor(Instructor instructor) {
+        personRepository.persistInstructor(instructor);
+    }
+
+    @Override
+    public void persistEmployee(Employee employee) {
+        personRepository.persistEmployee(employee);
+    }
+
+    @Override
+    public List<Student> getStudents(int page, int max) {
         return personRepository.getStudents(page, max);
     }
 
     @Override
-    public List<Person> getInstructors(int page, int max) {
+    public List<Instructor> getInstructors(int page, int max) {
         return personRepository.getInstructors(page, max);
     }
 
     @Override
-    public List<Person> getEmployees(int page, int max) {
+    public List<Employee> getEmployees(int page, int max) {
         return personRepository.getEmployees(page, max);
     }
 
     @Override
-    public Person getPersonById(Integer id) {
+    public Person getStudentById(Integer id) {
         try {
-            return personRepository.getPersonById(id);
+            return personRepository.getStudentById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoResultException("No result found for id: " + id);
+        }
+    }
+
+    @Override
+    public Person getInstructorById(Integer id) {
+        try {
+            return personRepository.getInstructorById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoResultException("No result found for id: " + id);
+        }
+    }
+
+    @Override
+    public Person getEmployeeById(Integer id) {
+        try {
+            return personRepository.getEmployeeById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new NoResultException("No result found for id: " + id);
         }

@@ -42,7 +42,7 @@ public class DatabasePreLoad {
 
         student.getTelephones().add(telephone);
 
-        personService.persistPerson(student);
+        personService.persistStudent(student);
     }
 
     @Bean
@@ -54,7 +54,7 @@ public class DatabasePreLoad {
             instructor.getTelephones().add(telephone);
         }
 
-        personService.persistPerson(instructor);
+        personService.persistInstructor(instructor);
     }
 
     @Bean
@@ -66,6 +66,6 @@ public class DatabasePreLoad {
             employee.getTelephones().add(telephone);
         }
 
-        personService.persistPerson(employee);
+        personService.persistEmployee(employee);
     }
 }

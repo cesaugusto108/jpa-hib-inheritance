@@ -1,11 +1,11 @@
 package augusto108.ces.advhibernate.domain.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+
+import java.util.Set;
 
 @Entity
-@DiscriminatorValue(value = "instructor")
+@Table(name = "instructor")
 public final class Instructor extends Person {
     @Column(name = "specialty", length = 20)
     private String specialty;
@@ -24,6 +24,16 @@ public final class Instructor extends Person {
 
     public void setSpecialty(String specialty) {
         this.specialty = specialty;
+    }
+
+    @JoinTable(
+            name = "instructor_telephone",
+            joinColumns = @JoinColumn(name = "instructor_id"),
+            inverseJoinColumns = @JoinColumn(name = "telephone_id")
+    )
+    @Override
+    public Set<Telephone> getTelephones() {
+        return super.getTelephones();
     }
 
     @Override

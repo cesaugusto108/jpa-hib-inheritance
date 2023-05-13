@@ -5,10 +5,7 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Inheritance single table strategy
-@Table(name = "person")
-@DiscriminatorColumn(name = "person_type", discriminatorType = DiscriminatorType.STRING)
+@MappedSuperclass // Inheritance mapped super class strategy
 public abstract non-sealed class Person extends BaseEntity {
     @Embedded
     private Name name;
@@ -18,19 +15,13 @@ public abstract non-sealed class Person extends BaseEntity {
             @AttributeOverride(name = "firstName", column = @Column(name = "social_first_name")),
             @AttributeOverride(name = "middleName", column = @Column(name = "social_middle_name")),
             @AttributeOverride(name = "lastName", column = @Column(name = "social_last_name"))
-    }
-    )
+    })
     private Name socialName;
 
     @Column(name = "email", nullable = false, length = 60)
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "person_telephone",
-            joinColumns = @JoinColumn(name = "person_id"),
-            inverseJoinColumns = @JoinColumn(name = "telephone_id")
-    )
     private final Set<Telephone> telephones = new HashSet<>();
 
     public Person() {

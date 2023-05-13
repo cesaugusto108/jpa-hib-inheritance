@@ -17,45 +17,69 @@ public class PersonRepositoryImpl implements PersonRepository {
         this.entityManager = entityManager;
     }
 
+
     @Override
-    public void persistPerson(Person person) {
-        entityManager.persist(person);
+    public void persistStudent(Student student) {
+        entityManager.persist(student);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public List<Person> getStudents(int page, int max) {
-        return entityManager
-                .createNativeQuery("select * from person where person_type = 'student'", Student.class)
-                .setFirstResult(page * max)
-                .setMaxResults(max)
-                .getResultList();
+    public void persistInstructor(Instructor instructor) {
+        entityManager.persist(instructor);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public List<Person> getInstructors(int page, int max) {
-        return entityManager
-                .createNativeQuery("select * from person where person_type = 'instructor'", Instructor.class)
-                .setFirstResult(page * max)
-                .setMaxResults(max)
-                .getResultList();
+    public void persistEmployee(Employee employee) {
+        entityManager.persist(employee);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public List<Person> getEmployees(int page, int max) {
+    public List<Student> getStudents(int page, int max) {
         return entityManager
-                .createNativeQuery("select * from person where person_type = 'employee'", Employee.class)
+                .createQuery("from Student", Student.class)
                 .setFirstResult(page * max)
                 .setMaxResults(max)
                 .getResultList();
     }
 
     @Override
-    public Person getPersonById(Integer id) {
+    public List<Instructor> getInstructors(int page, int max) {
         return entityManager
-                .createQuery("from Person p where id = :id", Person.class)
+                .createQuery("from Instructor", Instructor.class)
+                .setFirstResult(page * max)
+                .setMaxResults(max)
+                .getResultList();
+    }
+
+    @Override
+    public List<Employee> getEmployees(int page, int max) {
+        return entityManager
+                .createQuery("from Employee", Employee.class)
+                .setFirstResult(page * max)
+                .setMaxResults(max)
+                .getResultList();
+    }
+
+    @Override
+    public Person getStudentById(Integer id) {
+        return entityManager
+                .createQuery("from Student p where id = :id", Student.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    @Override
+    public Person getInstructorById(Integer id) {
+        return entityManager
+                .createQuery("from Instructor p where id = :id", Instructor.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    @Override
+    public Person getEmployeeById(Integer id) {
+        return entityManager
+                .createQuery("from Employee p where id = :id", Employee.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }

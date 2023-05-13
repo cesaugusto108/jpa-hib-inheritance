@@ -1,6 +1,7 @@
 package augusto108.ces.advhibernate.controllers;
 
 import augusto108.ces.advhibernate.domain.entities.Person;
+import augusto108.ces.advhibernate.domain.entities.Student;
 import augusto108.ces.advhibernate.services.PersonService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class StudentController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Person>> getStudents(
+    public ResponseEntity<List<Student>> getStudents(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int max
     ) {
@@ -27,6 +28,6 @@ public class StudentController {
 
     @GetMapping(value = "/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Person> getStudentById(@PathVariable("studentId") Integer id) {
-        return ResponseEntity.ok(service.getPersonById(id));
+        return ResponseEntity.ok(service.getStudentById(id));
     }
 }
