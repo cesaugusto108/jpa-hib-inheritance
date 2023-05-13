@@ -25,4 +25,9 @@ public final class Employee extends Person {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " (" + role.toString() + ")";
+    }
 }
