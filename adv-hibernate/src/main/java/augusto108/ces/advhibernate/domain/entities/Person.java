@@ -6,9 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Inheritance single table strategy
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // Inheritance table per class strategy
 @Table(name = "person")
-@DiscriminatorColumn(name = "person_type", discriminatorType = DiscriminatorType.STRING)
 public abstract non-sealed class Person extends BaseEntity {
     @Embedded
     private Name name;

@@ -39,9 +39,27 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person getPersonById(Integer id) {
+    public Person getStudentById(Integer id) {
         try {
-            return personRepository.getPersonById(id);
+            return personRepository.getStudentById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoResultException("No result found for id: " + id);
+        }
+    }
+
+    @Override
+    public Person getInstructorById(Integer id) {
+        try {
+            return personRepository.getInstructorById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new NoResultException("No result found for id: " + id);
+        }
+    }
+
+    @Override
+    public Person getEmployeeById(Integer id) {
+        try {
+            return personRepository.getEmployeeById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new NoResultException("No result found for id: " + id);
         }

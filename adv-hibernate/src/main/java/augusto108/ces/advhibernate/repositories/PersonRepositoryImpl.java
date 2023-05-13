@@ -26,7 +26,7 @@ public class PersonRepositoryImpl implements PersonRepository {
     @Override
     public List<Person> getStudents(int page, int max) {
         return entityManager
-                .createNativeQuery("select * from person where person_type = 'student'", Student.class)
+                .createNativeQuery("select * from student order by first_name asc", Student.class)
                 .setFirstResult(page * max)
                 .setMaxResults(max)
                 .getResultList();
@@ -36,7 +36,7 @@ public class PersonRepositoryImpl implements PersonRepository {
     @Override
     public List<Person> getInstructors(int page, int max) {
         return entityManager
-                .createNativeQuery("select * from person where person_type = 'instructor'", Instructor.class)
+                .createNativeQuery("select * from instructor order by first_name asc", Instructor.class)
                 .setFirstResult(page * max)
                 .setMaxResults(max)
                 .getResultList();
@@ -46,16 +46,32 @@ public class PersonRepositoryImpl implements PersonRepository {
     @Override
     public List<Person> getEmployees(int page, int max) {
         return entityManager
-                .createNativeQuery("select * from person where person_type = 'employee'", Employee.class)
+                .createNativeQuery("select * from employee order by first_name asc", Employee.class)
                 .setFirstResult(page * max)
                 .setMaxResults(max)
                 .getResultList();
     }
 
     @Override
-    public Person getPersonById(Integer id) {
+    public Person getStudentById(Integer id) {
         return entityManager
-                .createQuery("from Person p where id = :id", Person.class)
+                .createQuery("from Student p where id = :id", Student.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    @Override
+    public Person getInstructorById(Integer id) {
+        return entityManager
+                .createQuery("from Instructor p where id = :id", Instructor.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    @Override
+    public Person getEmployeeById(Integer id) {
+        return entityManager
+                .createQuery("from Employee p where id = :id", Employee.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }

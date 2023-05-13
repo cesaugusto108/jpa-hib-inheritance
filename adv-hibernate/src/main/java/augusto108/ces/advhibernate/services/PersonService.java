@@ -13,5 +13,9 @@ public interface PersonService {
 
     List<Person> getEmployees(int page, int max);
 
-    Person getPersonById(Integer id);
+    Person getStudentById(Integer id);
+
+    Person getInstructorById(Integer id);
+
+    Person getEmployeeById(Integer id);
 }

@@ -27,6 +27,6 @@ public class StudentController {
 
     @GetMapping(value = "/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Person> getStudentById(@PathVariable("studentId") Integer id) {
-        return ResponseEntity.ok(service.getPersonById(id));
+        return ResponseEntity.ok(service.getStudentById(id));
     }
 }

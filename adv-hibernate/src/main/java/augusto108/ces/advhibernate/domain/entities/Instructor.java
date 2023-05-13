@@ -1,11 +1,9 @@
 package augusto108.ces.advhibernate.domain.entities;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = "instructor")
 public final class Instructor extends Person {
     @Column(name = "specialty", length = 20)
     private String specialty;
