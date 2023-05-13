@@ -1,12 +1,10 @@
 package augusto108.ces.advhibernate.domain.entities;
 
 import augusto108.ces.advhibernate.domain.entities.enums.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "employee")
 public final class Employee extends Person {
     @Enumerated(EnumType.STRING)
     @Column(name = "employee_role", length = 20)

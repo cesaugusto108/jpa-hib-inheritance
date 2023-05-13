@@ -7,7 +7,6 @@ import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // Inheritance table per class strategy
-@Table(name = "person")
 public abstract non-sealed class Person extends BaseEntity {
     @Embedded
     private Name name;

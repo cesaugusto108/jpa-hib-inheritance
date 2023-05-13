@@ -2,8 +2,10 @@ package augusto108.ces.advhibernate.domain.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "instructor")
 public final class Instructor extends Person {
     @Column(name = "specialty", length = 20)
     private String specialty;
