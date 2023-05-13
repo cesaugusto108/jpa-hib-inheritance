@@ -22,31 +22,28 @@ public class PersonRepositoryImpl implements PersonRepository {
         entityManager.persist(person);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Person> getStudents(int page, int max) {
         return entityManager
-                .createNativeQuery("select * from student order by first_name asc", Student.class)
+                .createQuery("from Student", Person.class)
                 .setFirstResult(page * max)
                 .setMaxResults(max)
                 .getResultList();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Person> getInstructors(int page, int max) {
         return entityManager
-                .createNativeQuery("select * from instructor order by first_name asc", Instructor.class)
+                .createQuery("from Instructor", Person.class)
                 .setFirstResult(page * max)
                 .setMaxResults(max)
                 .getResultList();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Person> getEmployees(int page, int max) {
         return entityManager
-                .createNativeQuery("select * from employee order by first_name asc", Employee.class)
+                .createQuery("from Employee", Person.class)
                 .setFirstResult(page * max)
                 .setMaxResults(max)
                 .getResultList();

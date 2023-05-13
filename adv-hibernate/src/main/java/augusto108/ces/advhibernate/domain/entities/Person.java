@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS) // Inheritance table per class strategy
+@Inheritance(strategy = InheritanceType.JOINED) // Inheritance joined tables strategy
 @Table(name = "person")
 public abstract non-sealed class Person extends BaseEntity {
     @Embedded
@@ -17,8 +17,7 @@ public abstract non-sealed class Person extends BaseEntity {
             @AttributeOverride(name = "firstName", column = @Column(name = "social_first_name")),
             @AttributeOverride(name = "middleName", column = @Column(name = "social_middle_name")),
             @AttributeOverride(name = "lastName", column = @Column(name = "social_last_name"))
-    }
-    )
+    })
     private Name socialName;
 
     @Column(name = "email", nullable = false, length = 60)
