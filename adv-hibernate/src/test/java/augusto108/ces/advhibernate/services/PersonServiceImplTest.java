@@ -1,5 +1,6 @@
 package augusto108.ces.advhibernate.services;
 
+import augusto108.ces.advhibernate.domain.entities.Employee;
 import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Student;
 import org.junit.jupiter.api.AfterEach;
@@ -38,8 +39,15 @@ class PersonServiceImplTest {
                 "values ('instructor', 2, 'paulo@email.com', 'Paulo', 'Oliveira', 'Silva', 'Paulo', " +
                 "'Oliveira', 'Silva', NULL, 'Java', NULL);";
 
+        final String employeeQuery = "insert into person " +
+                "(`person_type`, `id`, `email`, `first_name`, `last_name`, `middle_name`, " +
+                "`social_first_name`, `social_last_name`, `social_middle_name`, `employee_role`, `specialty`, `registration`) " +
+                "values ('employee', 3, 'renata@email.com', 'Renata', 'Costa', 'Martins', 'Renata', " +
+                "'Costa', 'Martins', 'ADMIN', NULL, NULL);";
+
         jdbcTemplate.execute(studentQuery);
         jdbcTemplate.execute(instructorQuery);
+        jdbcTemplate.execute(employeeQuery);
     }
 
     @AfterEach
@@ -87,6 +95,19 @@ class PersonServiceImplTest {
 
     @Test
     void getEmployees() {
+        final List<Employee> employeeList = personService.getEmployees(0, 5);
+
+        assertNotNull(employeeList);
+        assertEquals(1, employeeList.size());
+        assertEquals(Employee.class, employeeList.get(0).getClass());
+        assertEquals(3, employeeList.get(0).getId());
+        assertEquals("Renata", employeeList.get(0).getName().getFirstName());
+        assertEquals("Martins", employeeList.get(0).getName().getMiddleName());
+        assertEquals("Costa", employeeList.get(0).getName().getLastName());
+        assertEquals("Renata", employeeList.get(0).getSocialName().getFirstName());
+        assertEquals("Martins", employeeList.get(0).getSocialName().getMiddleName());
+        assertEquals("Costa", employeeList.get(0).getSocialName().getLastName());
+        assertEquals("ADMIN", employeeList.get(0).getRole().toString());
     }
 
     @Test

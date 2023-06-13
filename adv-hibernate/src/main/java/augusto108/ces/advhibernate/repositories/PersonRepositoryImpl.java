@@ -44,7 +44,7 @@ public class PersonRepositoryImpl implements PersonRepository {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Person> getEmployees(int page, int max) {
+    public List<Employee> getEmployees(int page, int max) {
         return entityManager
                 .createNativeQuery("select * from person where person_type = 'employee'", Employee.class)
                 .setFirstResult(page * max)

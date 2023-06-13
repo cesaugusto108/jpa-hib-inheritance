@@ -1,5 +1,6 @@
 package augusto108.ces.advhibernate.services;
 
+import augusto108.ces.advhibernate.domain.entities.Employee;
 import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Person;
 import augusto108.ces.advhibernate.domain.entities.Student;
@@ -36,7 +37,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> getEmployees(int page, int max) {
+    public List<Employee> getEmployees(int page, int max) {
         return personRepository.getEmployees(page, max);
     }
 

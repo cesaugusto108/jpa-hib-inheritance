@@ -1,5 +1,6 @@
 package augusto108.ces.advhibernate.repositories;
 
+import augusto108.ces.advhibernate.domain.entities.Employee;
 import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Person;
 import augusto108.ces.advhibernate.domain.entities.Student;
@@ -13,7 +14,7 @@ public interface PersonRepository {
 
     List<Instructor> getInstructors(int page, int max);
 
-    List<Person> getEmployees(int page, int max);
+    List<Employee> getEmployees(int page, int max);
 
     Person getPersonById(Integer id);
 }
