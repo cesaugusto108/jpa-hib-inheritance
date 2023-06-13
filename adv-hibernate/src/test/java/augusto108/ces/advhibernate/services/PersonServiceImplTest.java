@@ -2,10 +2,10 @@ package augusto108.ces.advhibernate.services;
 
 import augusto108.ces.advhibernate.domain.entities.Employee;
 import augusto108.ces.advhibernate.domain.entities.Instructor;
+import augusto108.ces.advhibernate.domain.entities.Person;
 import augusto108.ces.advhibernate.domain.entities.Student;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import jakarta.persistence.NoResultException;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,11 +13,11 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class PersonServiceImplTest {
     @Autowired
     private PersonService personService;
@@ -112,5 +112,18 @@ class PersonServiceImplTest {
 
     @Test
     void getPersonById() {
+        final Person student = personService.getPersonById(1);
+        final Person instructor = personService.getPersonById(2);
+        final Person employee = personService.getPersonById(3);
+
+        assertNotNull(student);
+        assertNotNull(instructor);
+        assertNotNull(employee);
+
+        assertEquals(1, student.getId());
+        assertEquals(2, instructor.getId());
+        assertEquals(3, employee.getId());
+
+        assertThrows(NoResultException.class, () -> personService.getPersonById(0));
     }
 }
