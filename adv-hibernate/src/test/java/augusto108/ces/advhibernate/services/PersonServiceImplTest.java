@@ -1,9 +1,7 @@
 package augusto108.ces.advhibernate.services;
 
-import augusto108.ces.advhibernate.domain.entities.Employee;
-import augusto108.ces.advhibernate.domain.entities.Instructor;
-import augusto108.ces.advhibernate.domain.entities.Person;
-import augusto108.ces.advhibernate.domain.entities.Student;
+import augusto108.ces.advhibernate.domain.entities.*;
+import augusto108.ces.advhibernate.domain.entities.enums.Role;
 import jakarta.persistence.NoResultException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +28,19 @@ class PersonServiceImplTest {
         final String studentQuery = "insert into person " +
                 "(`person_type`, `id`, `email`, `first_name`, `last_name`, `middle_name`, " +
                 "`social_first_name`, `social_last_name`, `social_middle_name`, `employee_role`, `specialty`, `registration`) " +
-                "values ('student', 1, 'daniela@email.com', 'Daniela', 'Cardoso', 'Santos', 'Daniela', " +
+                "values ('student', 4, 'daniela@email.com', 'Daniela', 'Cardoso', 'Santos', 'Daniela', " +
                 "'Cardoso', 'Santos', NULL, NULL, '202000011200');";
 
         final String instructorQuery = "insert into person " +
                 "(`person_type`, `id`, `email`, `first_name`, `last_name`, `middle_name`, " +
                 "`social_first_name`, `social_last_name`, `social_middle_name`, `employee_role`, `specialty`, `registration`) " +
-                "values ('instructor', 2, 'paulo@email.com', 'Paulo', 'Oliveira', 'Silva', 'Paulo', " +
+                "values ('instructor', 5, 'paulo@email.com', 'Paulo', 'Oliveira', 'Silva', 'Paulo', " +
                 "'Oliveira', 'Silva', NULL, 'Java', NULL);";
 
         final String employeeQuery = "insert into person " +
                 "(`person_type`, `id`, `email`, `first_name`, `last_name`, `middle_name`, " +
                 "`social_first_name`, `social_last_name`, `social_middle_name`, `employee_role`, `specialty`, `registration`) " +
-                "values ('employee', 3, 'renata@email.com', 'Renata', 'Costa', 'Martins', 'Renata', " +
+                "values ('employee', 6, 'renata@email.com', 'Renata', 'Costa', 'Martins', 'Renata', " +
                 "'Costa', 'Martins', 'ADMIN', NULL, NULL);";
 
         jdbcTemplate.execute(studentQuery);
@@ -57,6 +55,32 @@ class PersonServiceImplTest {
 
     @Test
     void persistPerson() {
+        final Name studentName = new Name("Pedro", "Santos", "Barros");
+        final Name studentSocialName = new Name("Pedro", "Santos", "Barros");
+        final Student student = new Student(studentName, studentSocialName, "pedro@email.com", "202200020100");
+
+        final Name instructorName = new Name("Patrícia", "Alves", "Silva");
+        final Name instructorSocialName = new Name("Patrícia", "Alves", "Silva");
+        final Instructor instructor = new Instructor(instructorName, instructorSocialName, "patricia@email.com", "Spring");
+
+        final Name employeeName = new Name("Luís", "Batista", "Mota");
+        final Name employeeSocialName = new Name("Pedro", "Batista", "Mota");
+        final Employee employee = new Employee(employeeName, employeeSocialName, "luis@email.com", Role.MANAGER);
+
+        personService.persistPerson(student);
+        personService.persistPerson(instructor);
+        personService.persistPerson(employee);
+
+        assertNotNull(personService.getPersonById(1));
+        assertNotNull(personService.getPersonById(2));
+        assertNotNull(personService.getPersonById(3));
+
+        assertEquals(2, personService.getStudents(0, 5).size());
+        assertEquals(2, personService.getInstructors(0, 5).size());
+        assertEquals(2, personService.getEmployees(0, 5).size());
+        assertEquals("202200020100", personService.getStudents(0, 5).get(0).getRegistration());
+        assertEquals("Spring", personService.getInstructors(0, 5).get(0).getSpecialty());
+        assertEquals("MANAGER", personService.getEmployees(0, 5).get(0).getRole().toString());
     }
 
     @Test
@@ -66,7 +90,7 @@ class PersonServiceImplTest {
         assertNotNull(studentList);
         assertEquals(1, studentList.size());
         assertEquals(Student.class, studentList.get(0).getClass());
-        assertEquals(1, studentList.get(0).getId());
+        assertEquals(4, studentList.get(0).getId());
         assertEquals("Daniela", studentList.get(0).getName().getFirstName());
         assertEquals("Santos", studentList.get(0).getName().getMiddleName());
         assertEquals("Cardoso", studentList.get(0).getName().getLastName());
@@ -83,7 +107,7 @@ class PersonServiceImplTest {
         assertNotNull(instructorList);
         assertEquals(1, instructorList.size());
         assertEquals(Instructor.class, instructorList.get(0).getClass());
-        assertEquals(2, instructorList.get(0).getId());
+        assertEquals(5, instructorList.get(0).getId());
         assertEquals("Paulo", instructorList.get(0).getName().getFirstName());
         assertEquals("Silva", instructorList.get(0).getName().getMiddleName());
         assertEquals("Oliveira", instructorList.get(0).getName().getLastName());
@@ -100,7 +124,7 @@ class PersonServiceImplTest {
         assertNotNull(employeeList);
         assertEquals(1, employeeList.size());
         assertEquals(Employee.class, employeeList.get(0).getClass());
-        assertEquals(3, employeeList.get(0).getId());
+        assertEquals(6, employeeList.get(0).getId());
         assertEquals("Renata", employeeList.get(0).getName().getFirstName());
         assertEquals("Martins", employeeList.get(0).getName().getMiddleName());
         assertEquals("Costa", employeeList.get(0).getName().getLastName());
@@ -112,17 +136,17 @@ class PersonServiceImplTest {
 
     @Test
     void getPersonById() {
-        final Person student = personService.getPersonById(1);
-        final Person instructor = personService.getPersonById(2);
-        final Person employee = personService.getPersonById(3);
+        final Person student = personService.getPersonById(4);
+        final Person instructor = personService.getPersonById(5);
+        final Person employee = personService.getPersonById(6);
 
         assertNotNull(student);
         assertNotNull(instructor);
         assertNotNull(employee);
 
-        assertEquals(1, student.getId());
-        assertEquals(2, instructor.getId());
-        assertEquals(3, employee.getId());
+        assertEquals(4, student.getId());
+        assertEquals(5, instructor.getId());
+        assertEquals(6, employee.getId());
 
         assertThrows(NoResultException.class, () -> personService.getPersonById(0));
     }
