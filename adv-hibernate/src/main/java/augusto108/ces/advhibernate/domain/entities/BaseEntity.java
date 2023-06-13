@@ -7,8 +7,7 @@ import java.util.Objects;
 @MappedSuperclass
 public abstract sealed class BaseEntity permits Person, Telephone {
     @Id
-    @SequenceGenerator(name = "seq_gen", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "seq_gen")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 

@@ -23,36 +23,6 @@ class PersonServiceImplTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @BeforeEach
-    void setUp() {
-        final String studentQuery = "insert into person " +
-                "(`person_type`, `id`, `email`, `first_name`, `last_name`, `middle_name`, " +
-                "`social_first_name`, `social_last_name`, `social_middle_name`, `employee_role`, `specialty`, `registration`) " +
-                "values ('student', 4, 'daniela@email.com', 'Daniela', 'Cardoso', 'Santos', 'Daniela', " +
-                "'Cardoso', 'Santos', NULL, NULL, '202000011200');";
-
-        final String instructorQuery = "insert into person " +
-                "(`person_type`, `id`, `email`, `first_name`, `last_name`, `middle_name`, " +
-                "`social_first_name`, `social_last_name`, `social_middle_name`, `employee_role`, `specialty`, `registration`) " +
-                "values ('instructor', 5, 'paulo@email.com', 'Paulo', 'Oliveira', 'Silva', 'Paulo', " +
-                "'Oliveira', 'Silva', NULL, 'Java', NULL);";
-
-        final String employeeQuery = "insert into person " +
-                "(`person_type`, `id`, `email`, `first_name`, `last_name`, `middle_name`, " +
-                "`social_first_name`, `social_last_name`, `social_middle_name`, `employee_role`, `specialty`, `registration`) " +
-                "values ('employee', 6, 'renata@email.com', 'Renata', 'Costa', 'Martins', 'Renata', " +
-                "'Costa', 'Martins', 'ADMIN', NULL, NULL);";
-
-        jdbcTemplate.execute(studentQuery);
-        jdbcTemplate.execute(instructorQuery);
-        jdbcTemplate.execute(employeeQuery);
-    }
-
-    @AfterEach
-    void tearDown() {
-        jdbcTemplate.execute("delete from person");
-    }
-
     @Test
     void persistPerson() {
         final Name studentName = new Name("Pedro", "Santos", "Barros");
@@ -75,79 +45,114 @@ class PersonServiceImplTest {
         assertNotNull(personService.getPersonById(2));
         assertNotNull(personService.getPersonById(3));
 
-        assertEquals(2, personService.getStudents(0, 5).size());
-        assertEquals(2, personService.getInstructors(0, 5).size());
-        assertEquals(2, personService.getEmployees(0, 5).size());
+        assertEquals(1, personService.getStudents(0, 5).size());
+        assertEquals(1, personService.getInstructors(0, 5).size());
+        assertEquals(1, personService.getEmployees(0, 5).size());
         assertEquals("202200020100", personService.getStudents(0, 5).get(0).getRegistration());
         assertEquals("Spring", personService.getInstructors(0, 5).get(0).getSpecialty());
         assertEquals("MANAGER", personService.getEmployees(0, 5).get(0).getRole().toString());
+
+        jdbcTemplate.execute("delete from person;");
     }
 
-    @Test
-    void getStudents() {
-        final List<Student> studentList = personService.getStudents(0, 5);
+    @Nested
+    class NestedTests {
+        @BeforeEach
+        void setUp() {
+            final String studentQuery = "insert into person " +
+                    "(`person_type`, `id`, `email`, `first_name`, `last_name`, `middle_name`, " +
+                    "`social_first_name`, `social_last_name`, `social_middle_name`, `employee_role`, `specialty`, `registration`) " +
+                    "values ('student', 100, 'daniela@email.com', 'Daniela', 'Cardoso', 'Santos', 'Daniela', " +
+                    "'Cardoso', 'Santos', NULL, NULL, '202000011200');";
 
-        assertNotNull(studentList);
-        assertEquals(1, studentList.size());
-        assertEquals(Student.class, studentList.get(0).getClass());
-        assertEquals(4, studentList.get(0).getId());
-        assertEquals("Daniela", studentList.get(0).getName().getFirstName());
-        assertEquals("Santos", studentList.get(0).getName().getMiddleName());
-        assertEquals("Cardoso", studentList.get(0).getName().getLastName());
-        assertEquals("Daniela", studentList.get(0).getSocialName().getFirstName());
-        assertEquals("Santos", studentList.get(0).getSocialName().getMiddleName());
-        assertEquals("Cardoso", studentList.get(0).getSocialName().getLastName());
-        assertEquals("202000011200", studentList.get(0).getRegistration());
-    }
+            final String instructorQuery = "insert into person " +
+                    "(`person_type`, `id`, `email`, `first_name`, `last_name`, `middle_name`, " +
+                    "`social_first_name`, `social_last_name`, `social_middle_name`, `employee_role`, `specialty`, `registration`) " +
+                    "values ('instructor', 101, 'paulo@email.com', 'Paulo', 'Oliveira', 'Silva', 'Paulo', " +
+                    "'Oliveira', 'Silva', NULL, 'Java', NULL);";
 
-    @Test
-    void getInstructors() {
-        final List<Instructor> instructorList = personService.getInstructors(0, 5);
+            final String employeeQuery = "insert into person " +
+                    "(`person_type`, `id`, `email`, `first_name`, `last_name`, `middle_name`, " +
+                    "`social_first_name`, `social_last_name`, `social_middle_name`, `employee_role`, `specialty`, `registration`) " +
+                    "values ('employee', 102, 'renata@email.com', 'Renata', 'Costa', 'Martins', 'Renata', " +
+                    "'Costa', 'Martins', 'ADMIN', NULL, NULL);";
 
-        assertNotNull(instructorList);
-        assertEquals(1, instructorList.size());
-        assertEquals(Instructor.class, instructorList.get(0).getClass());
-        assertEquals(5, instructorList.get(0).getId());
-        assertEquals("Paulo", instructorList.get(0).getName().getFirstName());
-        assertEquals("Silva", instructorList.get(0).getName().getMiddleName());
-        assertEquals("Oliveira", instructorList.get(0).getName().getLastName());
-        assertEquals("Paulo", instructorList.get(0).getSocialName().getFirstName());
-        assertEquals("Silva", instructorList.get(0).getSocialName().getMiddleName());
-        assertEquals("Oliveira", instructorList.get(0).getSocialName().getLastName());
-        assertEquals("Java", instructorList.get(0).getSpecialty());
-    }
+            jdbcTemplate.execute(studentQuery);
+            jdbcTemplate.execute(instructorQuery);
+            jdbcTemplate.execute(employeeQuery);
+        }
 
-    @Test
-    void getEmployees() {
-        final List<Employee> employeeList = personService.getEmployees(0, 5);
+        @AfterEach
+        void tearDown() {
+            jdbcTemplate.execute("delete from person");
+        }
 
-        assertNotNull(employeeList);
-        assertEquals(1, employeeList.size());
-        assertEquals(Employee.class, employeeList.get(0).getClass());
-        assertEquals(6, employeeList.get(0).getId());
-        assertEquals("Renata", employeeList.get(0).getName().getFirstName());
-        assertEquals("Martins", employeeList.get(0).getName().getMiddleName());
-        assertEquals("Costa", employeeList.get(0).getName().getLastName());
-        assertEquals("Renata", employeeList.get(0).getSocialName().getFirstName());
-        assertEquals("Martins", employeeList.get(0).getSocialName().getMiddleName());
-        assertEquals("Costa", employeeList.get(0).getSocialName().getLastName());
-        assertEquals("ADMIN", employeeList.get(0).getRole().toString());
-    }
+        @Test
+        void getStudents() {
+            final List<Student> studentList = personService.getStudents(0, 5);
 
-    @Test
-    void getPersonById() {
-        final Person student = personService.getPersonById(4);
-        final Person instructor = personService.getPersonById(5);
-        final Person employee = personService.getPersonById(6);
+            assertNotNull(studentList);
+            assertEquals(1, studentList.size());
+            assertEquals(Student.class, studentList.get(0).getClass());
+            assertEquals(100, studentList.get(0).getId());
+            assertEquals("Daniela", studentList.get(0).getName().getFirstName());
+            assertEquals("Santos", studentList.get(0).getName().getMiddleName());
+            assertEquals("Cardoso", studentList.get(0).getName().getLastName());
+            assertEquals("Daniela", studentList.get(0).getSocialName().getFirstName());
+            assertEquals("Santos", studentList.get(0).getSocialName().getMiddleName());
+            assertEquals("Cardoso", studentList.get(0).getSocialName().getLastName());
+            assertEquals("202000011200", studentList.get(0).getRegistration());
+        }
 
-        assertNotNull(student);
-        assertNotNull(instructor);
-        assertNotNull(employee);
+        @Test
+        void getInstructors() {
+            final List<Instructor> instructorList = personService.getInstructors(0, 5);
 
-        assertEquals(4, student.getId());
-        assertEquals(5, instructor.getId());
-        assertEquals(6, employee.getId());
+            assertNotNull(instructorList);
+            assertEquals(1, instructorList.size());
+            assertEquals(Instructor.class, instructorList.get(0).getClass());
+            assertEquals(101, instructorList.get(0).getId());
+            assertEquals("Paulo", instructorList.get(0).getName().getFirstName());
+            assertEquals("Silva", instructorList.get(0).getName().getMiddleName());
+            assertEquals("Oliveira", instructorList.get(0).getName().getLastName());
+            assertEquals("Paulo", instructorList.get(0).getSocialName().getFirstName());
+            assertEquals("Silva", instructorList.get(0).getSocialName().getMiddleName());
+            assertEquals("Oliveira", instructorList.get(0).getSocialName().getLastName());
+            assertEquals("Java", instructorList.get(0).getSpecialty());
+        }
 
-        assertThrows(NoResultException.class, () -> personService.getPersonById(0));
+        @Test
+        void getEmployees() {
+            final List<Employee> employeeList = personService.getEmployees(0, 5);
+
+            assertNotNull(employeeList);
+            assertEquals(1, employeeList.size());
+            assertEquals(Employee.class, employeeList.get(0).getClass());
+            assertEquals(102, employeeList.get(0).getId());
+            assertEquals("Renata", employeeList.get(0).getName().getFirstName());
+            assertEquals("Martins", employeeList.get(0).getName().getMiddleName());
+            assertEquals("Costa", employeeList.get(0).getName().getLastName());
+            assertEquals("Renata", employeeList.get(0).getSocialName().getFirstName());
+            assertEquals("Martins", employeeList.get(0).getSocialName().getMiddleName());
+            assertEquals("Costa", employeeList.get(0).getSocialName().getLastName());
+            assertEquals("ADMIN", employeeList.get(0).getRole().toString());
+        }
+
+        @Test
+        void getPersonById() {
+            final Person student = personService.getPersonById(100);
+            final Person instructor = personService.getPersonById(101);
+            final Person employee = personService.getPersonById(102);
+
+            assertNotNull(student);
+            assertNotNull(instructor);
+            assertNotNull(employee);
+
+            assertEquals(100, student.getId());
+            assertEquals(101, instructor.getId());
+            assertEquals(102, employee.getId());
+
+            assertThrows(NoResultException.class, () -> personService.getPersonById(0));
+        }
     }
 }
