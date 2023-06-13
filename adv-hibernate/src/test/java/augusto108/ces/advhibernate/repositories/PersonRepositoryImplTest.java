@@ -53,8 +53,7 @@ class PersonRepositoryImplTest {
         assertEquals("Maria", persistedPerson.getSocialName().getFirstName());
         assertEquals("Santos", persistedPerson.getSocialName().getMiddleName());
         assertEquals("Andrade", persistedPerson.getSocialName().getLastName());
-        assertEquals(1, persistedPerson.getId());
-        assertEquals(1, persistedPerson.getId());
+        assertEquals("maria@email.com", persistedPerson.getEmail());
     }
 
     @Test
