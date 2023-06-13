@@ -1,6 +1,5 @@
 package augusto108.ces.advhibernate.services;
 
-import augusto108.ces.advhibernate.domain.entities.Person;
 import augusto108.ces.advhibernate.domain.entities.Student;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -45,10 +45,11 @@ class PersonServiceImplTest {
 
     @Test
     void getStudents() {
-        final List<Person> personList = personService.getStudents(0, 5);
+        final List<Student> personList = personService.getStudents(0, 5);
 
         assertNotNull(personList);
         assertEquals(1, personList.size());
+        assertEquals(Student.class, personList.get(0).getClass());
         assertEquals(1, personList.get(0).getId());
         assertEquals("Daniela", personList.get(0).getName().getFirstName());
         assertEquals("Santos", personList.get(0).getName().getMiddleName());
@@ -56,6 +57,7 @@ class PersonServiceImplTest {
         assertEquals("Daniela", personList.get(0).getSocialName().getFirstName());
         assertEquals("Santos", personList.get(0).getSocialName().getMiddleName());
         assertEquals("Cardoso", personList.get(0).getSocialName().getLastName());
+        assertEquals("202000011200", personList.get(0).getRegistration());
     }
 
     @Test

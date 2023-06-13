@@ -1,6 +1,7 @@
 package augusto108.ces.advhibernate.services;
 
 import augusto108.ces.advhibernate.domain.entities.Person;
+import augusto108.ces.advhibernate.domain.entities.Student;
 import augusto108.ces.advhibernate.repositories.PersonRepository;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
@@ -24,7 +25,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> getStudents(int page, int max) {
+    public List<Student> getStudents(int page, int max) {
         return personRepository.getStudents(page, max);
     }
 
