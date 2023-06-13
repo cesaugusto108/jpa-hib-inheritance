@@ -1,5 +1,6 @@
 package augusto108.ces.advhibernate.controllers;
 
+import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Person;
 import augusto108.ces.advhibernate.services.PersonService;
 import org.springframework.http.MediaType;
@@ -18,7 +19,7 @@ public class InstructorController {
     }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Person>> getInstructors(
+    public ResponseEntity<List<Instructor>> getInstructors(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int max
     ) {
