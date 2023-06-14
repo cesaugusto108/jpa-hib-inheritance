@@ -26,14 +26,6 @@ class PersonRepositoryImplTest {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void persistPerson() {
         final Name studentName = new Name("Maria", "Santos", "Andrade");
