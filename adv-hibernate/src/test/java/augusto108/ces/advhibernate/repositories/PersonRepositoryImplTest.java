@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Transactional
@@ -75,6 +76,7 @@ class PersonRepositoryImplTest {
         assertEquals("Larissa", studentList.get(0).getSocialName().getFirstName());
         assertEquals("Pereira", studentList.get(0).getSocialName().getMiddleName());
         assertEquals("Castro", studentList.get(0).getSocialName().getLastName());
+        assertEquals("202000011201", studentList.get(0).getRegistration());
 
         assertEquals("Cláudia", studentList.get(1).getName().getFirstName());
         assertEquals("Vieira", studentList.get(1).getName().getMiddleName());
@@ -82,6 +84,7 @@ class PersonRepositoryImplTest {
         assertEquals("Cláudia", studentList.get(1).getSocialName().getFirstName());
         assertEquals("Vieira", studentList.get(1).getSocialName().getMiddleName());
         assertEquals("Antunes", studentList.get(1).getSocialName().getLastName());
+        assertEquals("202000011202", studentList.get(1).getRegistration());
 
         entityManager.createNativeQuery("delete from person;").executeUpdate();
     }
