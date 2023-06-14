@@ -19,9 +19,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class StudentControllerTest {
     @Autowired
-    private StudentController studentController;
-
-    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
