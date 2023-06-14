@@ -9,7 +9,10 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,8 +59,31 @@ class PersonRepositoryImplTest {
         assertEquals("maria@email.com", persistedPerson.getEmail());
     }
 
+    @Sql("/students-script.sql")
     @Test
     void getStudents() {
+        final List<Student> studentList = personRepository.getStudents(0, 5);
+
+        assertNotNull(studentList);
+        assertEquals(2, studentList.size());
+        assertEquals(100, studentList.get(0).getId());
+        assertEquals(101, studentList.get(1).getId());
+
+        assertEquals("Larissa", studentList.get(0).getName().getFirstName());
+        assertEquals("Pereira", studentList.get(0).getName().getMiddleName());
+        assertEquals("Castro", studentList.get(0).getName().getLastName());
+        assertEquals("Larissa", studentList.get(0).getSocialName().getFirstName());
+        assertEquals("Pereira", studentList.get(0).getSocialName().getMiddleName());
+        assertEquals("Castro", studentList.get(0).getSocialName().getLastName());
+
+        assertEquals("Cláudia", studentList.get(1).getName().getFirstName());
+        assertEquals("Vieira", studentList.get(1).getName().getMiddleName());
+        assertEquals("Antunes", studentList.get(1).getName().getLastName());
+        assertEquals("Cláudia", studentList.get(1).getSocialName().getFirstName());
+        assertEquals("Vieira", studentList.get(1).getSocialName().getMiddleName());
+        assertEquals("Antunes", studentList.get(1).getSocialName().getLastName());
+
+        entityManager.createNativeQuery("delete from person;").executeUpdate();
     }
 
     @Test
