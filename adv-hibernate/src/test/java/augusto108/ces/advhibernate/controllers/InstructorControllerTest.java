@@ -56,6 +56,10 @@ class InstructorControllerTest {
     }
 
     @Test
-    void getInstructorById() {
+    void getInstructorById() throws Exception {
+        mockMvc.perform(get("/instructors/{id}", 102))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(jsonContent));
     }
 }
