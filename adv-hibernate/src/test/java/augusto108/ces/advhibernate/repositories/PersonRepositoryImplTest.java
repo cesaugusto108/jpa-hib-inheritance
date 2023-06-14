@@ -1,9 +1,6 @@
 package augusto108.ces.advhibernate.repositories;
 
-import augusto108.ces.advhibernate.domain.entities.Instructor;
-import augusto108.ces.advhibernate.domain.entities.Name;
-import augusto108.ces.advhibernate.domain.entities.Person;
-import augusto108.ces.advhibernate.domain.entities.Student;
+import augusto108.ces.advhibernate.domain.entities.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.*;
@@ -116,8 +113,30 @@ class PersonRepositoryImplTest {
         assertEquals("Ferreira", instructorList.get(1).getSocialName().getLastName());
     }
 
+    @Sql("/employees-script.sql")
     @Test
     void getEmployees() {
+        final List<Employee> employeeList = personRepository.getEmployees(0, 5);
+
+        assertNotNull(employeeList);
+
+        assertEquals(2, employeeList.size());
+        assertEquals(100, employeeList.get(0).getId());
+        assertEquals(101, employeeList.get(1).getId());
+
+        assertEquals("Ronaldo", employeeList.get(0).getName().getFirstName());
+        assertEquals("Oliveira", employeeList.get(0).getName().getMiddleName());
+        assertEquals("Santos", employeeList.get(0).getName().getLastName());
+        assertEquals("Ronaldo", employeeList.get(0).getSocialName().getFirstName());
+        assertEquals("Oliveira", employeeList.get(0).getSocialName().getMiddleName());
+        assertEquals("Santos", employeeList.get(0).getSocialName().getLastName());
+
+        assertEquals("Lígia", employeeList.get(1).getName().getFirstName());
+        assertEquals("Vieira", employeeList.get(1).getName().getMiddleName());
+        assertEquals("Barros", employeeList.get(1).getName().getLastName());
+        assertEquals("Lígia", employeeList.get(1).getSocialName().getFirstName());
+        assertEquals("Vieira", employeeList.get(1).getSocialName().getMiddleName());
+        assertEquals("Barros", employeeList.get(1).getSocialName().getLastName());
     }
 
     @Test
