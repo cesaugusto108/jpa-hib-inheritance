@@ -41,10 +41,6 @@ class PersonServiceImplTest {
         personService.persistPerson(instructor);
         personService.persistPerson(employee);
 
-        assertNotNull(personService.getPersonById(1));
-        assertNotNull(personService.getPersonById(2));
-        assertNotNull(personService.getPersonById(3));
-
         assertEquals(1, personService.getStudents(0, 5).size());
         assertEquals(1, personService.getInstructors(0, 5).size());
         assertEquals(1, personService.getEmployees(0, 5).size());

@@ -6,7 +6,6 @@ import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,8 +94,8 @@ class PersonRepositoryImplTest {
         assertNotNull(instructorList);
 
         assertEquals(2, instructorList.size());
-        assertEquals(100, instructorList.get(0).getId());
-        assertEquals(101, instructorList.get(1).getId());
+        assertEquals(102, instructorList.get(0).getId());
+        assertEquals(103, instructorList.get(1).getId());
 
         assertEquals("Milena", instructorList.get(0).getName().getFirstName());
         assertEquals("Freitas", instructorList.get(0).getName().getMiddleName());
@@ -121,8 +120,8 @@ class PersonRepositoryImplTest {
         assertNotNull(employeeList);
 
         assertEquals(2, employeeList.size());
-        assertEquals(100, employeeList.get(0).getId());
-        assertEquals(101, employeeList.get(1).getId());
+        assertEquals(104, employeeList.get(0).getId());
+        assertEquals(105, employeeList.get(1).getId());
 
         assertEquals("Ronaldo", employeeList.get(0).getName().getFirstName());
         assertEquals("Oliveira", employeeList.get(0).getName().getMiddleName());
@@ -139,7 +138,28 @@ class PersonRepositoryImplTest {
         assertEquals("Barros", employeeList.get(1).getSocialName().getLastName());
     }
 
+    @Sql({"/students-script.sql", "/instructors-script.sql", "/employees-script.sql"})
     @Test
     void getPersonById() {
+        final Student larissa = (Student) personRepository.getPersonById(100);
+        final Student claudia = (Student) personRepository.getPersonById(101);
+        final Instructor milena = (Instructor) personRepository.getPersonById(102);
+        final Instructor leonardo = (Instructor) personRepository.getPersonById(103);
+        final Employee ronaldo = (Employee) personRepository.getPersonById(104);
+        final Employee ligia = (Employee) personRepository.getPersonById(105);
+
+        assertNotNull(larissa);
+        assertNotNull(claudia);
+        assertNotNull(milena);
+        assertNotNull(leonardo);
+        assertNotNull(ronaldo);
+        assertNotNull(ligia);
+
+        assertEquals("202000011201", larissa.getRegistration());
+        assertEquals("202000011202", claudia.getRegistration());
+        assertEquals("Java", milena.getSpecialty());
+        assertEquals("Kotlin", leonardo.getSpecialty());
+        assertEquals("TRAINEE", ronaldo.getRole().toString());
+        assertEquals("ADMIN", ligia.getRole().toString());
     }
 }
