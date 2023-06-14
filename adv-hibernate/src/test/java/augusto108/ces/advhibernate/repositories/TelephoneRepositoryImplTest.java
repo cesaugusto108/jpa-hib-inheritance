@@ -69,16 +69,15 @@ class TelephoneRepositoryImplTest {
 
         telephoneRepository.persistTelephone(telephone);
 
-        final Telephone persistedTelephone = entityManager
-                .createQuery("from Telephone where id = :id", Telephone.class)
-                .setParameter("id", 1)
-                .getSingleResult();
+        final List<Telephone> telephoneList = entityManager
+                .createQuery("from Telephone order by id", Telephone.class)
+                .getResultList();
 
-        assertNotNull(persistedTelephone);
+        assertNotNull(telephoneList);
 
-        assertEquals(1, persistedTelephone.getId());
-        assertEquals("55", persistedTelephone.getCountryCode());
-        assertEquals("79", persistedTelephone.getAreaCode());
-        assertEquals("991900010", persistedTelephone.getNumber());
+        assertEquals(1, telephoneList.size());
+        assertEquals("55", telephoneList.get(0).getCountryCode());
+        assertEquals("79", telephoneList.get(0).getAreaCode());
+        assertEquals("991900010", telephoneList.get(0).getNumber());
     }
 }
