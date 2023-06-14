@@ -1,5 +1,6 @@
 package augusto108.ces.advhibernate.repositories;
 
+import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Name;
 import augusto108.ces.advhibernate.domain.entities.Person;
 import augusto108.ces.advhibernate.domain.entities.Student;
@@ -8,6 +9,7 @@ import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +68,7 @@ class PersonRepositoryImplTest {
         final List<Student> studentList = personRepository.getStudents(0, 5);
 
         assertNotNull(studentList);
+
         assertEquals(2, studentList.size());
         assertEquals(100, studentList.get(0).getId());
         assertEquals(101, studentList.get(1).getId());
@@ -85,12 +88,32 @@ class PersonRepositoryImplTest {
         assertEquals("Vieira", studentList.get(1).getSocialName().getMiddleName());
         assertEquals("Antunes", studentList.get(1).getSocialName().getLastName());
         assertEquals("202000011202", studentList.get(1).getRegistration());
-
-        entityManager.createNativeQuery("delete from person;").executeUpdate();
     }
 
+    @Sql("/instructors-script.sql")
     @Test
     void getInstructors() {
+        final List<Instructor> instructorList = personRepository.getInstructors(0, 5);
+
+        assertNotNull(instructorList);
+
+        assertEquals(2, instructorList.size());
+        assertEquals(100, instructorList.get(0).getId());
+        assertEquals(101, instructorList.get(1).getId());
+
+        assertEquals("Milena", instructorList.get(0).getName().getFirstName());
+        assertEquals("Freitas", instructorList.get(0).getName().getMiddleName());
+        assertEquals("Andrade", instructorList.get(0).getName().getLastName());
+        assertEquals("Milena", instructorList.get(0).getSocialName().getFirstName());
+        assertEquals("Freitas", instructorList.get(0).getSocialName().getMiddleName());
+        assertEquals("Andrade", instructorList.get(0).getSocialName().getLastName());
+
+        assertEquals("Leonardo", instructorList.get(1).getName().getFirstName());
+        assertEquals("Silva", instructorList.get(1).getName().getMiddleName());
+        assertEquals("Ferreira", instructorList.get(1).getName().getLastName());
+        assertEquals("Leonardo", instructorList.get(1).getSocialName().getFirstName());
+        assertEquals("Silva", instructorList.get(1).getSocialName().getMiddleName());
+        assertEquals("Ferreira", instructorList.get(1).getSocialName().getLastName());
     }
 
     @Test
