@@ -28,6 +28,10 @@ class StudentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    private final String jsonContent = "{\"id\":100,\"name\":{\"firstName\":\"Larissa\",\"middleName\":\"Pereira\",\"lastName\":\"Castro\"}," +
+            "\"socialName\":{\"firstName\":\"Larissa\",\"middleName\":\"Pereira\",\"lastName\":\"Castro\"},\"email\":\"larissa@email.com\"," +
+            "\"telephones\":[],\"registration\":\"202000011201\"}";
+
     @BeforeEach
     void setUp() {
         final String studentQuery = "insert " +
@@ -46,17 +50,17 @@ class StudentControllerTest {
 
     @Test
     void getStudents() throws Exception {
-        final String jsonContent = "[{\"id\":100,\"name\":{\"firstName\":\"Larissa\",\"middleName\":\"Pereira\",\"lastName\":\"Castro\"}," +
-                "\"socialName\":{\"firstName\":\"Larissa\",\"middleName\":\"Pereira\",\"lastName\":\"Castro\"},\"email\":\"larissa@email.com\"," +
-                "\"telephones\":[],\"registration\":\"202000011201\"}]";
-
         mockMvc.perform(get("/students/all"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(jsonContent));
+                .andExpect(content().json("[" + jsonContent + "]"));
     }
 
     @Test
-    void getStudentById() {
+    void getStudentById() throws Exception {
+        mockMvc.perform(get("/students/{id}", 100))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().json(jsonContent));
     }
 }
