@@ -1,7 +1,9 @@
 package augusto108.ces.advhibernate.services;
 
 import augusto108.ces.advhibernate.domain.entities.Telephone;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,11 +24,14 @@ class TelephoneServiceImplTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @BeforeEach
     void setUp() {
         jdbcTemplate.execute(
                 "insert into telephone (`id`, `area_code`, `country_code`, `number`) " +
-                        "values (100, '79', '55', '999990099');");
+                        "values (100, '79', '55', '9899900399');");
     }
 
     @AfterEach
@@ -37,13 +42,15 @@ class TelephoneServiceImplTest {
 
     @Test
     void persistTelephone() {
-        telephoneService.persistTelephone(new Telephone("55", "85", "999990000"));
+        telephoneService.persistTelephone(new Telephone("55", "85", "939990070"));
 
-        List<Telephone> telephoneList = telephoneService.getTelephones(0, 5);
+        List<Telephone> telephoneList = entityManager
+                .createQuery("from Telephone order by id", Telephone.class)
+                .getResultList();
 
         boolean containsNumber = false;
         for (Telephone telephone : telephoneList) {
-            if (telephone.getNumber().equals("999990000")) {
+            if (telephone.toString().equals("+55 (85) 939990070")) {
                 containsNumber = true;
                 break;
             }
@@ -60,7 +67,7 @@ class TelephoneServiceImplTest {
         assertEquals(100, telephone.getId());
         assertEquals("55", telephone.getCountryCode());
         assertEquals("79", telephone.getAreaCode());
-        assertEquals("999990099", telephone.getNumber());
+        assertEquals("9899900399", telephone.getNumber());
 
         assertThrows(NoResultException.class, () -> telephoneService.getTelephoneById(0));
     }
