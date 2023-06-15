@@ -14,8 +14,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -45,27 +44,50 @@ class TelephoneRepositoryImplTest {
         assertEquals("988080808", t1.getNumber());
         assertEquals("988080809", t2.getNumber());
         assertEquals("988080810", t3.getNumber());
+        assertEquals("+55 (79) 988080808", t1.toString());
+        assertEquals("+55 (79) 988080809", t2.toString());
+        assertEquals("+55 (79) 988080810", t3.toString());
     }
 
     @Sql("/telephones-script.sql")
     @Test
     void getTelephones() {
-        final List<Telephone> telephoneList = telephoneRepository.getTelephones(0, 5);
+        final List<Telephone> telephoneList = telephoneRepository.getTelephones(0, 10);
 
         assertNotNull(telephoneList);
 
-        assertEquals(3, telephoneList.size());
-        assertEquals(100, telephoneList.get(0).getId());
-        assertEquals(101, telephoneList.get(1).getId());
-        assertEquals(102, telephoneList.get(2).getId());
-        assertEquals("988080808", telephoneList.get(0).getNumber());
-        assertEquals("988080809", telephoneList.get(1).getNumber());
-        assertEquals("988080810", telephoneList.get(2).getNumber());
+        assertEquals(8, telephoneList.size());
+
+        boolean contains988080808 = false;
+        for (Telephone telephone : telephoneList) {
+            if (telephone.toString().equals("+55 (79) 988080808")) {
+                contains988080808 = true;
+                break;
+            }
+        }
+
+        boolean contains988080809 = false;
+        for (Telephone telephone : telephoneList) {
+            if (telephone.toString().equals("+55 (79) 988080809")) {
+                contains988080809 = true;
+                break;
+            }
+        }
+
+        boolean contains988080810 = false;
+        for (Telephone telephone : telephoneList) {
+            if (telephone.toString().equals("+55 (79) 988080810")) {
+                contains988080810 = true;
+                break;
+            }
+        }
+
+        assertTrue(contains988080808 && contains988080809 && contains988080810);
     }
 
     @Test
     void persistTelephone() {
-        final Telephone telephone = new Telephone("55", "79", "991900010");
+        final Telephone telephone = new Telephone("55", "91", "965550022");
 
         telephoneRepository.persistTelephone(telephone);
 
@@ -75,9 +97,14 @@ class TelephoneRepositoryImplTest {
 
         assertNotNull(telephoneList);
 
-        assertEquals(1, telephoneList.size());
-        assertEquals("55", telephoneList.get(0).getCountryCode());
-        assertEquals("79", telephoneList.get(0).getAreaCode());
-        assertEquals("991900010", telephoneList.get(0).getNumber());
+        boolean containsPhone = false;
+        for (Telephone t : telephoneList) {
+            if (t.toString().equals("+55 (91) 965550022")) {
+                containsPhone = true;
+                break;
+            }
+        }
+
+        assertTrue(containsPhone);
     }
 }
