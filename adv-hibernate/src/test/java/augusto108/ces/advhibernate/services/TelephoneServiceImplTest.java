@@ -76,8 +76,19 @@ class TelephoneServiceImplTest {
     void getTelephones() {
         telephoneService.persistTelephone(new Telephone("55", "71", "999980101"));
 
-        final List<Telephone> telephoneList = telephoneService.getTelephones(0, 5);
+        final List<Telephone> telephoneList = telephoneService.getTelephones(0, 10);
 
         assertNotNull(telephoneList);
+        assertEquals(7, telephoneList.size());
+
+        boolean contains999980101 = false;
+        for (Telephone telephone : telephoneList) {
+            if (telephone.toString().equals("+55 (71) 999980101")) {
+                contains999980101 = true;
+                break;
+            }
+        }
+
+        assertTrue(contains999980101);
     }
 }
