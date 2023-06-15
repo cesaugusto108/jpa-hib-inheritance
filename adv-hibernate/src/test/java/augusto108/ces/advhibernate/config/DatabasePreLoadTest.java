@@ -3,6 +3,7 @@ package augusto108.ces.advhibernate.config;
 import augusto108.ces.advhibernate.data.EmployeeLoad;
 import augusto108.ces.advhibernate.data.InstructorLoad;
 import augusto108.ces.advhibernate.data.StudentLoad;
+import augusto108.ces.advhibernate.domain.entities.Employee;
 import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Student;
 import augusto108.ces.advhibernate.domain.entities.Telephone;
@@ -126,6 +127,41 @@ class DatabasePreLoadTest {
     }
 
     @Test
+    @DisplayName("Persisting an employee")
     void persistEmployee() {
+        final Employee employee = employeeLoad.createEmployee();
+        final Telephone[] telephones = employeeLoad.createTelephones();
+
+        assertNotNull(employee);
+        assertNotNull(telephones);
+
+        for (Telephone telephone : telephones) {
+            telephoneService.persistTelephone(telephone);
+        }
+
+        personService.persistPerson(employee);
+
+        final List<Telephone> telephoneList = telephoneService.getTelephones(0, 5);
+        final List<Employee> employeeList = personService.getEmployees(0, 5);
+
+        assertNotNull(telephoneList);
+        assertNotNull(employeeList);
+
+        assertEquals(2, telephoneList.size());
+        assertEquals(1, employeeList.size());
+        assertEquals("55", telephoneList.get(0).getCountryCode());
+        assertEquals("55", telephoneList.get(1).getCountryCode());
+        assertEquals("79", telephoneList.get(0).getAreaCode());
+        assertEquals("79", telephoneList.get(1).getAreaCode());
+        assertEquals("999993333", telephoneList.get(0).getNumber());
+        assertEquals("999994444", telephoneList.get(1).getNumber());
+        assertEquals("Marieta", employeeList.get(0).getName().getFirstName());
+        assertEquals("Santos", employeeList.get(0).getName().getMiddleName());
+        assertEquals("Araújo", employeeList.get(0).getName().getLastName());
+        assertEquals("Marieta", employeeList.get(0).getSocialName().getFirstName());
+        assertEquals("Santos", employeeList.get(0).getSocialName().getMiddleName());
+        assertEquals("Araújo", employeeList.get(0).getSocialName().getLastName());
+        assertEquals("marieta@email.com", employeeList.get(0).getEmail());
+        assertEquals("ADMIN", employeeList.get(0).getRole().toString());
     }
 }
