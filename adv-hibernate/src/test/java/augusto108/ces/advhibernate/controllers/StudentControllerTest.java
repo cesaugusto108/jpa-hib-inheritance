@@ -18,15 +18,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class StudentControllerTest {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private MockMvc mockMvc;
-
     private final String jsonContent = "{\"id\":100,\"name\":{\"firstName\":\"Larissa\",\"middleName\":\"Pereira\",\"lastName\":\"Castro\"}," +
             "\"socialName\":{\"firstName\":\"Larissa\",\"middleName\":\"Pereira\",\"lastName\":\"Castro\"},\"email\":\"larissa@email.com\"," +
             "\"telephones\":[],\"registration\":\"202000011201\"}";
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {

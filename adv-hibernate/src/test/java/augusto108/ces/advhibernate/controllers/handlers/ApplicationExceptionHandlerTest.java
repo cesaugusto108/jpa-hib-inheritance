@@ -19,11 +19,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class ApplicationExceptionHandlerTest {
-    @Autowired
-    private MockMvc mockMvc;
-
     private final String status = "NOT_FOUND";
     private final int statusCode = 404;
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     void noHandlerFoundException() throws Exception {

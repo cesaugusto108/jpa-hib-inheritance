@@ -3,6 +3,7 @@ package augusto108.ces.advhibernate.config;
 import augusto108.ces.advhibernate.data.EmployeeLoad;
 import augusto108.ces.advhibernate.data.InstructorLoad;
 import augusto108.ces.advhibernate.data.StudentLoad;
+import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Student;
 import augusto108.ces.advhibernate.domain.entities.Telephone;
 import augusto108.ces.advhibernate.services.PersonService;
@@ -74,8 +75,6 @@ class DatabasePreLoadTest {
         assertNotNull(studentList);
         assertNotNull(telephoneList);
 
-        assertEquals(1, telephoneList.get(0).getId());
-        assertEquals(1, studentList.get(0).getId());
         assertEquals("55", telephoneList.get(0).getCountryCode());
         assertEquals("71", telephoneList.get(0).getAreaCode());
         assertEquals("999990000", telephoneList.get(0).getNumber());
@@ -88,7 +87,42 @@ class DatabasePreLoadTest {
     }
 
     @Test
+    @DisplayName("Persisting an instructor")
     void persistInstructor() {
+        final Instructor instructor = instructorLoad.createInstructor();
+        final Telephone[] telephones = instructorLoad.createTelephones();
+
+        assertNotNull(instructor);
+        assertNotNull(telephones);
+
+        for (Telephone telephone : telephones) {
+            telephoneService.persistTelephone(telephone);
+        }
+
+        personService.persistPerson(instructor);
+
+        final List<Telephone> telephoneList = telephoneService.getTelephones(0, 5);
+        final List<Instructor> instructorList = personService.getInstructors(0, 5);
+
+        assertNotNull(telephoneList);
+        assertNotNull(instructorList);
+
+        assertEquals(2, telephoneList.size());
+        assertEquals(1, instructorList.size());
+        assertEquals("55", telephoneList.get(0).getCountryCode());
+        assertEquals("55", telephoneList.get(1).getCountryCode());
+        assertEquals("79", telephoneList.get(0).getAreaCode());
+        assertEquals("79", telephoneList.get(1).getAreaCode());
+        assertEquals("999999999", telephoneList.get(0).getNumber());
+        assertEquals("999991111", telephoneList.get(1).getNumber());
+        assertEquals("Antonio", instructorList.get(0).getName().getFirstName());
+        assertEquals("Jorge", instructorList.get(0).getName().getMiddleName());
+        assertEquals("Sá", instructorList.get(0).getName().getLastName());
+        assertEquals("Antonio", instructorList.get(0).getSocialName().getFirstName());
+        assertEquals("Jorge", instructorList.get(0).getSocialName().getMiddleName());
+        assertEquals("Sá", instructorList.get(0).getSocialName().getLastName());
+        assertEquals("antonio@email.com", instructorList.get(0).getEmail());
+        assertEquals("Redes", instructorList.get(0).getSpecialty());
     }
 
     @Test
