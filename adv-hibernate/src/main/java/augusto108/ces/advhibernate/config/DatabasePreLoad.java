@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile({"!test", "!databasetest"})
+@Profile({"!test & !databasetest"})
 public class DatabasePreLoad {
     private final PersonService personService;
     private final TelephoneService telephoneService;
