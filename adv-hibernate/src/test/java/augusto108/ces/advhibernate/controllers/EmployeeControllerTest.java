@@ -8,7 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,11 +20,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class EmployeeControllerTest {
-    private final String jsonContent = "{\"id\":104,\"name\":{\"firstName\":\"Ronaldo\",\"middleName\":\"Oliveira\",\"lastName\":\"Santos\"}," +
-            "\"socialName\":{\"firstName\":\"Ronaldo\",\"middleName\":\"Oliveira\",\"lastName\":\"Santos\"},\"email\":\"ronaldo@email.com\"" +
-            ",\"telephones\":[],\"role\":\"TRAINEE\"}";
+    private final String jsonContent = "{\"id\":104,\"telephones\":[],\"name\":{\"firstName\":\"Ronaldo\",\"middleName\":\"Oliveira\"," +
+            "\"lastName\":\"Santos\"},\"socialName\":{\"firstName\":\"Ronaldo\",\"middleName\":\"Oliveira\",\"lastName\":\"Santos\"}," +
+            "\"email\":\"ronaldo@email.com\",\"role\":\"TRAINEE\"}";
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -39,15 +43,18 @@ class EmployeeControllerTest {
 
     @AfterEach
     void tearDown() {
+        jdbcTemplate.execute("delete from person_telephone;");
+        jdbcTemplate.execute("delete from telephone;");
         jdbcTemplate.execute("delete from person;");
     }
 
     @Test
     void getEmployees() throws Exception {
-        mockMvc.perform(get("/employees/all"))
+        MvcResult result = mockMvc.perform(get("/employees/all?page=0&max=10"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[" + jsonContent + "]"));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON)).andReturn();
+
+        assertTrue(result.getResponse().getContentAsString().contains(jsonContent));
     }
 
     @Test
