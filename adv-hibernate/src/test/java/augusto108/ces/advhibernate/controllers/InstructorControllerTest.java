@@ -18,11 +18,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class InstructorControllerTest {
-    private final String jsonContent = "{\"id\":102,\"name\":{\"firstName\":\"Milena\",\"middleName\":\"Freitas\",\"lastName\":\"Andrade\"}," +
+    private final String jsonContent1 = "{\"id\":102,\"name\":{\"firstName\":\"Milena\",\"middleName\":\"Freitas\",\"lastName\":\"Andrade\"}," +
             "\"socialName\":{\"firstName\":\"Milena\",\"middleName\":\"Freitas\",\"lastName\":\"Andrade\"},\"email\":\"milena@email.com\",\"telephones\":[]," +
             "\"specialty\":\"Java\"}";
+
+    private final String jsonContent2 = "{\"id\":2,\"telephones\":[{\"id\":2,\"countryCode\":\"55\",\"areaCode\":\"79\",\"number\":\"999999999\"}," +
+            "{\"id\":3,\"countryCode\":\"55\",\"areaCode\":\"79\",\"number\":\"999991111\"}],\"name\":{\"firstName\":\"Antonio\",\"middleName\":\"Jorge\",\"lastName\":\"Sá\"}," +
+            "\"socialName\":{\"firstName\":\"Antonio\",\"middleName\":\"Jorge\",\"lastName\":\"Sá\"},\"email\":\"antonio@email.com\",\"specialty\":\"Redes\"}";
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -39,6 +45,8 @@ class InstructorControllerTest {
 
     @AfterEach
     void tearDown() {
+        jdbcTemplate.execute("delete from person_telephone;");
+        jdbcTemplate.execute("delete from telephone;");
         jdbcTemplate.execute("delete from person;");
     }
 
@@ -47,7 +55,7 @@ class InstructorControllerTest {
         mockMvc.perform(get("/instructors/all"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[" + jsonContent + "]"));
+                .andExpect(content().json("[" + jsonContent2 + "," + jsonContent1 + "]"));
     }
 
     @Test
@@ -55,6 +63,6 @@ class InstructorControllerTest {
         mockMvc.perform(get("/instructors/{id}", 102))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(jsonContent));
+                .andExpect(content().json(jsonContent1));
     }
 }
