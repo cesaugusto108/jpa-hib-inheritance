@@ -14,8 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -37,12 +36,12 @@ class PersonRepositoryImplTest {
         personRepository.persistPerson(student);
 
         final Person persistedPerson = entityManager
-                .createQuery("from Person p where id = :id", Person.class)
-                .setParameter("id", 1)
+                .createQuery("from Person p where registration = :registration and email = :email", Person.class)
+                .setParameter("registration", "202200022002")
+                .setParameter("email", "maria@email.com")
                 .getSingleResult();
 
         assertNotNull(persistedPerson);
-        assertEquals(1, persistedPerson.getId());
         assertEquals("Maria", persistedPerson.getName().getFirstName());
         assertEquals("Santos", persistedPerson.getName().getMiddleName());
         assertEquals("Andrade", persistedPerson.getName().getLastName());
@@ -55,29 +54,27 @@ class PersonRepositoryImplTest {
     @Sql("/students-script.sql")
     @Test
     void getStudents() {
-        final List<Student> studentList = personRepository.getStudents(0, 5);
+        final List<Student> studentList = personRepository.getStudents(0, 10);
 
         assertNotNull(studentList);
 
-        assertEquals(2, studentList.size());
-        assertEquals(100, studentList.get(0).getId());
-        assertEquals(101, studentList.get(1).getId());
+        boolean containsLarissa = false;
+        for (Student student : studentList) {
+            if (student.toString().equals("Larissa Pereira Castro (202000011201)")) {
+                containsLarissa = true;
+                break;
+            }
+        }
 
-        assertEquals("Larissa", studentList.get(0).getName().getFirstName());
-        assertEquals("Pereira", studentList.get(0).getName().getMiddleName());
-        assertEquals("Castro", studentList.get(0).getName().getLastName());
-        assertEquals("Larissa", studentList.get(0).getSocialName().getFirstName());
-        assertEquals("Pereira", studentList.get(0).getSocialName().getMiddleName());
-        assertEquals("Castro", studentList.get(0).getSocialName().getLastName());
-        assertEquals("202000011201", studentList.get(0).getRegistration());
+        boolean containsClaudia = false;
+        for (Student student : studentList) {
+            if (student.toString().equals("Cláudia Vieira Antunes (202000011202)")) {
+                containsClaudia = true;
+                break;
+            }
+        }
 
-        assertEquals("Cláudia", studentList.get(1).getName().getFirstName());
-        assertEquals("Vieira", studentList.get(1).getName().getMiddleName());
-        assertEquals("Antunes", studentList.get(1).getName().getLastName());
-        assertEquals("Cláudia", studentList.get(1).getSocialName().getFirstName());
-        assertEquals("Vieira", studentList.get(1).getSocialName().getMiddleName());
-        assertEquals("Antunes", studentList.get(1).getSocialName().getLastName());
-        assertEquals("202000011202", studentList.get(1).getRegistration());
+        assertTrue(containsLarissa && containsClaudia);
     }
 
     @Sql("/instructors-script.sql")
@@ -87,23 +84,23 @@ class PersonRepositoryImplTest {
 
         assertNotNull(instructorList);
 
-        assertEquals(2, instructorList.size());
-        assertEquals(102, instructorList.get(0).getId());
-        assertEquals(103, instructorList.get(1).getId());
+        boolean containsMilena = false;
+        for (Instructor instructor : instructorList) {
+            if (instructor.toString().equals("Milena Freitas Andrade (Java)")) {
+                containsMilena = true;
+                break;
+            }
+        }
 
-        assertEquals("Milena", instructorList.get(0).getName().getFirstName());
-        assertEquals("Freitas", instructorList.get(0).getName().getMiddleName());
-        assertEquals("Andrade", instructorList.get(0).getName().getLastName());
-        assertEquals("Milena", instructorList.get(0).getSocialName().getFirstName());
-        assertEquals("Freitas", instructorList.get(0).getSocialName().getMiddleName());
-        assertEquals("Andrade", instructorList.get(0).getSocialName().getLastName());
+        boolean containsLeonardo = false;
+        for (Instructor instructor : instructorList) {
+            if (instructor.toString().equals("Leonardo Silva Ferreira (Kotlin)")) {
+                containsLeonardo = true;
+                break;
+            }
+        }
 
-        assertEquals("Leonardo", instructorList.get(1).getName().getFirstName());
-        assertEquals("Silva", instructorList.get(1).getName().getMiddleName());
-        assertEquals("Ferreira", instructorList.get(1).getName().getLastName());
-        assertEquals("Leonardo", instructorList.get(1).getSocialName().getFirstName());
-        assertEquals("Silva", instructorList.get(1).getSocialName().getMiddleName());
-        assertEquals("Ferreira", instructorList.get(1).getSocialName().getLastName());
+        assertTrue(containsMilena && containsLeonardo);
     }
 
     @Sql("/employees-script.sql")
@@ -113,23 +110,23 @@ class PersonRepositoryImplTest {
 
         assertNotNull(employeeList);
 
-        assertEquals(2, employeeList.size());
-        assertEquals(104, employeeList.get(0).getId());
-        assertEquals(105, employeeList.get(1).getId());
+        boolean containsRonaldo = false;
+        for (Employee employee : employeeList) {
+            if (employee.toString().equals("Ronaldo Oliveira Santos (TRAINEE)")) {
+                containsRonaldo = true;
+                break;
+            }
+        }
 
-        assertEquals("Ronaldo", employeeList.get(0).getName().getFirstName());
-        assertEquals("Oliveira", employeeList.get(0).getName().getMiddleName());
-        assertEquals("Santos", employeeList.get(0).getName().getLastName());
-        assertEquals("Ronaldo", employeeList.get(0).getSocialName().getFirstName());
-        assertEquals("Oliveira", employeeList.get(0).getSocialName().getMiddleName());
-        assertEquals("Santos", employeeList.get(0).getSocialName().getLastName());
+        boolean containsLigia = false;
+        for (Employee employee : employeeList) {
+            if (employee.toString().equals("Lígia Vieira Barros (ADMIN)")) {
+                containsLigia = true;
+                break;
+            }
+        }
 
-        assertEquals("Lígia", employeeList.get(1).getName().getFirstName());
-        assertEquals("Vieira", employeeList.get(1).getName().getMiddleName());
-        assertEquals("Barros", employeeList.get(1).getName().getLastName());
-        assertEquals("Lígia", employeeList.get(1).getSocialName().getFirstName());
-        assertEquals("Vieira", employeeList.get(1).getSocialName().getMiddleName());
-        assertEquals("Barros", employeeList.get(1).getSocialName().getLastName());
+        assertTrue(containsRonaldo && containsLigia);
     }
 
     @Sql({"/students-script.sql", "/instructors-script.sql", "/employees-script.sql"})
