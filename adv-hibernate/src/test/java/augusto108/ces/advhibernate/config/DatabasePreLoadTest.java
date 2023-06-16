@@ -12,10 +12,7 @@ import augusto108.ces.advhibernate.services.PersonService;
 import augusto108.ces.advhibernate.services.TelephoneService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -182,6 +179,7 @@ class DatabasePreLoadTest {
     }
 
     @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.IndicativeSentences.class)
     class DatabasePreLoadClassNestedTests {
         private DatabasePreLoad databasePreLoad;
 
@@ -189,10 +187,6 @@ class DatabasePreLoadTest {
         void setUp() {
             databasePreLoad =
                     new DatabasePreLoad(personService, telephoneService, studentLoad, instructorLoad, employeeLoad);
-        }
-
-        @AfterEach
-        void tearDown() {
         }
 
         @Test
@@ -211,6 +205,31 @@ class DatabasePreLoadTest {
             assertEquals(
                     new Telephone("55", "71", "999990000").toString(),
                     telephone.toString()
+            );
+        }
+
+        @Test
+        void persistInstructor() {
+            databasePreLoad.persistInstructor();
+
+            final List<Instructor> instructors = entityManager
+                    .createQuery("from Person order by id", Instructor.class)
+                    .getResultList();
+
+            assertEquals(1, instructors.size());
+            assertEquals("antonio@email.com", instructors.get(0).getEmail());
+
+            final Telephone telephone1 = (Telephone) instructors.get(0).getTelephones().toArray()[0];
+            final Telephone telephone2 = (Telephone) instructors.get(0).getTelephones().toArray()[1];
+
+            assertEquals(
+                    new Telephone("55", "79", "999999999").toString(),
+                    telephone1.toString()
+            );
+
+            assertEquals(
+                    new Telephone("55", "79", "999991111").toString(),
+                    telephone2.toString()
             );
         }
     }
