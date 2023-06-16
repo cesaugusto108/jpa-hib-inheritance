@@ -232,5 +232,30 @@ class DatabasePreLoadTest {
                     telephone2.toString()
             );
         }
+
+        @Test
+        void persistEmployee() {
+            databasePreLoad.persistEmployee();
+
+            final List<Employee> employees = entityManager
+                    .createQuery("from Person order by id", Employee.class)
+                    .getResultList();
+
+            assertEquals(1, employees.size());
+            assertEquals("marieta@email.com", employees.get(0).getEmail());
+
+            final Telephone telephone1 = (Telephone) employees.get(0).getTelephones().toArray()[0];
+            final Telephone telephone2 = (Telephone) employees.get(0).getTelephones().toArray()[1];
+
+            assertEquals(
+                    new Telephone("55", "79", "999993333").toString(),
+                    telephone1.toString()
+            );
+
+            assertEquals(
+                    new Telephone("55", "79", "999994444").toString(),
+                    telephone2.toString()
+            );
+        }
     }
 }
