@@ -3,9 +3,11 @@ package augusto108.ces.advhibernate.config;
 import augusto108.ces.advhibernate.data.EmployeeLoad;
 import augusto108.ces.advhibernate.data.InstructorLoad;
 import augusto108.ces.advhibernate.data.StudentLoad;
+import augusto108.ces.advhibernate.domain.entities.Employee;
 import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Student;
 import augusto108.ces.advhibernate.domain.entities.Telephone;
+import augusto108.ces.advhibernate.domain.entities.enums.Role;
 import augusto108.ces.advhibernate.services.PersonService;
 import augusto108.ces.advhibernate.services.TelephoneService;
 import jakarta.persistence.EntityManager;
@@ -113,12 +115,12 @@ class DatabasePreLoadTest {
         assertEquals("Redes", i.getSpecialty());
         assertEquals("antonio@email.com", i.getEmail());
 
-        final Telephone t1 = (Telephone) entityManager
+        final Telephone t1 = entityManager
                 .createQuery("from Telephone t where number = :number", Telephone.class)
                 .setParameter("number", "999999999")
                 .getSingleResult();
 
-        final Telephone t2 = (Telephone) entityManager
+        final Telephone t2 = entityManager
                 .createQuery("from Telephone t where number = :number", Telephone.class)
                 .setParameter("number", "999991111")
                 .getSingleResult();
@@ -135,5 +137,45 @@ class DatabasePreLoadTest {
 
     @Test
     void persistEmployee() {
+        final Telephone[] telephones = employeeLoad.createTelephones();
+        final Employee employee = employeeLoad.createEmployee();
+
+        assertNotNull(telephones);
+        assertNotNull(employee);
+
+        for (Telephone telephone : telephones) {
+            telephoneService.persistTelephone(telephone);
+        }
+
+        employee.getTelephones().addAll(List.of(telephones));
+        personService.persistPerson(employee);
+
+        final Employee e = entityManager
+                .createQuery("from Employee e where role = :role and email = :email", Employee.class)
+                .setParameter("role", Role.ADMIN)
+                .setParameter("email", "marieta@email.com")
+                .getSingleResult();
+
+        assertEquals("ADMIN", e.getRole().toString());
+        assertEquals("marieta@email.com", e.getEmail());
+
+        final Telephone t1 = entityManager
+                .createQuery("from Telephone t where number = :number", Telephone.class)
+                .setParameter("number", "999993333")
+                .getSingleResult();
+
+        final Telephone t2 = entityManager
+                .createQuery("from Telephone t where number = :number", Telephone.class)
+                .setParameter("number", "999994444")
+                .getSingleResult();
+
+        assertEquals(t1.getAreaCode(), "79");
+        assertEquals(t1.getNumber(), "999993333");
+        assertEquals(t2.getAreaCode(), "79");
+        assertEquals(t2.getNumber(), "999994444");
+
+        assertEquals(2, e.getTelephones().size());
+        assertEquals(t1, e.getTelephones().toArray()[0]);
+        assertEquals(t2, e.getTelephones().toArray()[1]);
     }
 }
