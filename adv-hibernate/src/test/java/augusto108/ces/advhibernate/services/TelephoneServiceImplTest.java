@@ -1,9 +1,8 @@
-package augusto108.ces.advhibernate.repositories;
+package augusto108.ces.advhibernate.services;
 
 import augusto108.ces.advhibernate.domain.entities.Telephone;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Transactional
 @ActiveProfiles("test")
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
-class TelephoneRepositoryImplTest {
+class TelephoneServiceImplTest {
     @Autowired
-    private TelephoneRepository telephoneRepository;
+    private TelephoneService telephoneService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -34,21 +34,21 @@ class TelephoneRepositoryImplTest {
 
     @Test
     void persistTelephone() {
-        final Telephone telephone = new Telephone("55", "82", "999151515");
+        final Telephone telephone = new Telephone("55", "85", "999159977");
 
-        telephoneRepository.persistTelephone(telephone);
+        telephoneService.persistTelephone(telephone);
 
         final List<Telephone> telephones = entityManager
                 .createQuery("from Telephone order by id", Telephone.class).getResultList();
 
-        boolean contains999151515 = false;
+        boolean contains999159977 = false;
         for (Telephone t : telephones) {
-            if (t.toString().equals("+55 (82) 999151515")) {
-                contains999151515 = true;
+            if (t.toString().equals("+55 (85) 999159977")) {
+                contains999159977 = true;
                 break;
             }
         }
 
-        assertTrue(contains999151515);
+        assertTrue(contains999159977);
     }
 }
