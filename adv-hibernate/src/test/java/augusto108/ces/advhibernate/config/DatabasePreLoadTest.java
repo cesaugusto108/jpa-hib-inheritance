@@ -13,6 +13,8 @@ import augusto108.ces.advhibernate.services.TelephoneService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -177,5 +179,39 @@ class DatabasePreLoadTest {
         assertEquals(2, e.getTelephones().size());
         assertEquals(t1, e.getTelephones().toArray()[0]);
         assertEquals(t2, e.getTelephones().toArray()[1]);
+    }
+
+    @Nested
+    class DatabasePreLoadClassNestedTests {
+        private DatabasePreLoad databasePreLoad;
+
+        @BeforeEach
+        void setUp() {
+            databasePreLoad =
+                    new DatabasePreLoad(personService, telephoneService, studentLoad, instructorLoad, employeeLoad);
+        }
+
+        @AfterEach
+        void tearDown() {
+        }
+
+        @Test
+        void persistStudent() {
+            databasePreLoad.persistStudent();
+
+            final List<Student> students = entityManager
+                    .createQuery("from Person order by id", Student.class)
+                    .getResultList();
+
+            assertEquals(1, students.size());
+            assertEquals("carlos@email.com", students.get(0).getEmail());
+
+            final Telephone telephone = (Telephone) students.get(0).getTelephones().toArray()[0];
+
+            assertEquals(
+                    new Telephone("55", "71", "999990000").toString(),
+                    telephone.toString()
+            );
+        }
     }
 }
