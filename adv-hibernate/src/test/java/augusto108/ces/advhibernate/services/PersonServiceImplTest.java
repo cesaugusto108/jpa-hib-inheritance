@@ -3,6 +3,7 @@ package augusto108.ces.advhibernate.services;
 import augusto108.ces.advhibernate.domain.entities.*;
 import augusto108.ces.advhibernate.domain.entities.enums.Role;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @Transactional
@@ -98,6 +100,7 @@ class PersonServiceImplTest {
         final Student student = (Student) personService.getStudentById(10000);
         assertEquals(10000, student.getId());
         assertEquals("Felipe Pires Monteiro (201900098666)", student.toString());
+        assertThrows(NoResultException.class, () -> personService.getStudentById(0));
     }
 
     @Test
@@ -105,6 +108,7 @@ class PersonServiceImplTest {
         final Instructor instructor = (Instructor) personService.getInstructorById(10001);
         assertEquals(10001, instructor.getId());
         assertEquals("Cátia Santos Almeida (Banco de Dados)", instructor.toString());
+        assertThrows(NoResultException.class, () -> personService.getInstructorById(0));
     }
 
     @Test
@@ -112,5 +116,6 @@ class PersonServiceImplTest {
         final Employee employee = (Employee) personService.getEmployeeById(10002);
         assertEquals(10002, employee.getId());
         assertEquals("Otávio Silva Brito (MANAGER)", employee.toString());
+        assertThrows(NoResultException.class, () -> personService.getEmployeeById(0));
     }
 }
