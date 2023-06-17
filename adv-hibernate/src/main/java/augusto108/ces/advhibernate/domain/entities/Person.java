@@ -10,15 +10,9 @@ import java.util.Set;
 @Table(name = "person")
 @DiscriminatorColumn(name = "person_type", discriminatorType = DiscriminatorType.STRING)
 public abstract non-sealed class Person extends BaseEntity {
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "person_telephone",
-            joinColumns = @JoinColumn(name = "person_id"),
-            inverseJoinColumns = @JoinColumn(name = "telephone_id")
-    )
-    private final Set<Telephone> telephones = new HashSet<>();
     @Embedded
     private Name name;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "firstName", column = @Column(name = "social_first_name")),
@@ -27,8 +21,17 @@ public abstract non-sealed class Person extends BaseEntity {
     }
     )
     private Name socialName;
+
     @Column(name = "email", nullable = false, length = 60)
     private String email;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "person_telephone",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "telephone_id")
+    )
+    private final Set<Telephone> telephones = new HashSet<>();
 
     public Person() {
     }
