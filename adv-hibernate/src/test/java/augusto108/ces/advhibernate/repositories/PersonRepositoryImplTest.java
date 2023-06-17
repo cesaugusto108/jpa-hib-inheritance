@@ -1,9 +1,6 @@
 package augusto108.ces.advhibernate.repositories;
 
-import augusto108.ces.advhibernate.domain.entities.Employee;
-import augusto108.ces.advhibernate.domain.entities.Instructor;
-import augusto108.ces.advhibernate.domain.entities.Name;
-import augusto108.ces.advhibernate.domain.entities.Student;
+import augusto108.ces.advhibernate.domain.entities.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.*;
@@ -76,9 +73,7 @@ class PersonRepositoryImplTest {
 
     @Test
     void getStudents() {
-        final List<Student> students = entityManager
-                .createQuery("from Student order by id", Student.class)
-                .getResultList();
+        final List<Person> students = personRepository.getStudents(0, 10);
 
         assertEquals(1, students.size());
         assertEquals("Renata Santos Silva (201900098191)", students.get(0).toString());
@@ -86,9 +81,7 @@ class PersonRepositoryImplTest {
 
     @Test
     void getInstructors() {
-        final List<Instructor> instructors = entityManager
-                .createQuery("from Instructor order by id", Instructor.class)
-                .getResultList();
+        final List<Person> instructors = personRepository.getInstructors(0, 10);
 
         assertEquals(1, instructors.size());
         assertEquals("Amauri Pereira Andrade (Banco de Dados)", instructors.get(0).toString());
@@ -96,9 +89,7 @@ class PersonRepositoryImplTest {
 
     @Test
     void getEmployees() {
-        final List<Employee> employees = entityManager
-                .createQuery("from Employee order by id", Employee.class)
-                .getResultList();
+        final List<Person> employees = personRepository.getEmployees(0, 10);
 
         assertEquals(1, employees.size());
         assertEquals("Patrícia Silva Castro (MANAGER)", employees.get(0).toString());
