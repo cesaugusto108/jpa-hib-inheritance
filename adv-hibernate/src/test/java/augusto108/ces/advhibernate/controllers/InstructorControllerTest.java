@@ -1,5 +1,7 @@
 package augusto108.ces.advhibernate.controllers;
 
+import augusto108.ces.advhibernate.domain.entities.Instructor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,10 +10,12 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -22,15 +26,14 @@ class InstructorControllerTest {
             "\"socialName\":{\"firstName\":\"Milena\",\"middleName\":\"Freitas\",\"lastName\":\"Andrade\"},\"email\":\"milena@email.com\",\"telephones\":[]," +
             "\"specialty\":\"Java\"}";
 
-    private final String jsonContent2 = "{\"id\":2,\"telephones\":[{\"id\":2,\"countryCode\":\"55\",\"areaCode\":\"79\",\"number\":\"999999999\"}," +
-            "{\"id\":3,\"countryCode\":\"55\",\"areaCode\":\"79\",\"number\":\"999991111\"}],\"name\":{\"firstName\":\"Antonio\",\"middleName\":\"Jorge\",\"lastName\":\"Sá\"}," +
-            "\"socialName\":{\"firstName\":\"Antonio\",\"middleName\":\"Jorge\",\"lastName\":\"Sá\"},\"email\":\"antonio@email.com\",\"specialty\":\"Redes\"}";
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
@@ -52,17 +55,24 @@ class InstructorControllerTest {
 
     @Test
     void getInstructors() throws Exception {
-        mockMvc.perform(get("/instructors/all"))
+        mockMvc.perform(get("/instructors/all?page=0&max=10"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("[" + jsonContent2 + "," + jsonContent1 + "]"));
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(content().json("[" + jsonContent1 + "]"));
     }
 
     @Test
     void getInstructorById() throws Exception {
-        mockMvc.perform(get("/instructors/{id}", 102))
+        MvcResult result = mockMvc.perform(get("/instructors/{id}", 102))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(jsonContent1));
+                .andExpect(content().json(jsonContent1))
+                .andReturn();
+
+        final String json = result.getResponse().getContentAsString();
+        final Instructor instructor = objectMapper.readValue(json, Instructor.class);
+
+        assertEquals("Milena Freitas Andrade (Java)", instructor.toString());
     }
 }

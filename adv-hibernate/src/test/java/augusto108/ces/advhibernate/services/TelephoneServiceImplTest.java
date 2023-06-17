@@ -79,7 +79,7 @@ class TelephoneServiceImplTest {
         final List<Telephone> telephoneList = telephoneService.getTelephones(0, 10);
 
         assertNotNull(telephoneList);
-        assertEquals(7, telephoneList.size());
+        assertEquals(2, telephoneList.size());
 
         boolean contains999980101 = false;
         for (Telephone telephone : telephoneList) {
