@@ -67,6 +67,7 @@ class InstructorControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(3002)))
+                .andExpect(jsonPath("$.telephones", hasSize(0)))
                 .andExpect(jsonPath("$.specialty", is("Kotlin")))
                 .andReturn();
 
