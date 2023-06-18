@@ -51,12 +51,12 @@ class EmployeeControllerTest {
 
         final String jsonContent = result.getResponse().getContentAsString();
 
-        final boolean containsId3004 = objectMapper
+        final boolean containsId20001 = objectMapper
                 .readValue(jsonContent, ArrayList.class).get(0).toString().contains("id=20001");
-        final boolean containsId3005 = objectMapper
+        final boolean containsId20000 = objectMapper
                 .readValue(jsonContent, ArrayList.class).get(1).toString().contains("id=20000");
 
-        assertTrue(containsId3004 && containsId3005);
+        assertTrue(containsId20001 && containsId20000);
     }
 
     @Sql("/employees-script.sql")
