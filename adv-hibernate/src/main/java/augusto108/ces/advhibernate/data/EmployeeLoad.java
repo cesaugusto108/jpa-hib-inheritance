@@ -11,6 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource("classpath:sample-employee.properties")
 public class EmployeeLoad {
+
     @Value("${employee.first-name}")
     private String firstName;
 
@@ -40,7 +41,6 @@ public class EmployeeLoad {
 
     public Employee createEmployee() {
         final Name name = new Name(firstName, middleName, lastName);
-
         return new Employee(name, name, email, role);
     }
 

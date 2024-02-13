@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "telephone")
 public final class Telephone extends BaseEntity {
+
     @Column(name = "country_code", nullable = false, length = 3)
     private String countryCode;
 

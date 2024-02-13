@@ -7,6 +7,7 @@ import augusto108.ces.advhibernate.domain.entities.Student;
 import augusto108.ces.advhibernate.repositories.PersonRepository;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,10 @@ import java.util.List;
 @Service
 @Transactional
 public class PersonServiceImpl implements PersonService {
+
     private final PersonRepository personRepository;
 
+    @Autowired
     public PersonServiceImpl(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }

@@ -4,6 +4,7 @@ import augusto108.ces.advhibernate.domain.entities.Telephone;
 import augusto108.ces.advhibernate.repositories.TelephoneRepository;
 import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,10 @@ import java.util.List;
 @Service
 @Transactional
 public class TelephoneServiceImpl implements TelephoneService {
+
     private final TelephoneRepository telephoneRepository;
 
+    @Autowired
     public TelephoneServiceImpl(TelephoneRepository telephoneRepository) {
         this.telephoneRepository = telephoneRepository;
     }

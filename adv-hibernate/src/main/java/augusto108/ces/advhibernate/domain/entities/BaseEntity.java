@@ -6,6 +6,7 @@ import java.util.Objects;
 
 @MappedSuperclass
 public abstract sealed class BaseEntity permits Person, Telephone {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)

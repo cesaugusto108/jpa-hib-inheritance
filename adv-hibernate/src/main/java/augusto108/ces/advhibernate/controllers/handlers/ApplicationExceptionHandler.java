@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class ApplicationExceptionHandler {
+
     @ExceptionHandler({NoResultException.class, NoHandlerFoundException.class})
     public ResponseEntity<ErrorResponse> handleNotFound(Exception e) {
         return ResponseEntity
@@ -22,7 +23,8 @@ public class ApplicationExceptionHandler {
                 .body(new ErrorResponse(e.toString(), e.getMessage(), HttpStatus.NOT_FOUND));
     }
 
-    private static class ErrorResponse {
+    public static class ErrorResponse {
+
         private final String error;
         private final String message;
         private final HttpStatus status;

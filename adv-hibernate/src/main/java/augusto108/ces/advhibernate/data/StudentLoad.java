@@ -10,6 +10,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource("classpath:sample-student.properties")
 public class StudentLoad {
+
     @Value("${student.first-name}")
     private String firstName;
 
@@ -36,7 +37,6 @@ public class StudentLoad {
 
     public Student createStudent() {
         final Name name = new Name(firstName, middleName, lastName);
-
         return new Student(name, name, email, registration);
     }
 

@@ -9,6 +9,7 @@ import augusto108.ces.advhibernate.domain.entities.Student;
 import augusto108.ces.advhibernate.domain.entities.Telephone;
 import augusto108.ces.advhibernate.services.PersonService;
 import augusto108.ces.advhibernate.services.TelephoneService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -16,12 +17,14 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile({"!test & !databasetest"})
 public class DatabasePreLoad {
+
     private final PersonService personService;
     private final TelephoneService telephoneService;
     private final StudentLoad studentLoad;
     private final InstructorLoad instructorLoad;
     private final EmployeeLoad employeeLoad;
 
+    @Autowired
     public DatabasePreLoad(
             PersonService personService,
             TelephoneService telephoneService,

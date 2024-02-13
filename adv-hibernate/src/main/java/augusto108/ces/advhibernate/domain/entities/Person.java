@@ -10,6 +10,7 @@ import java.util.Set;
 @Table(name = "person")
 @DiscriminatorColumn(name = "person_type", discriminatorType = DiscriminatorType.STRING)
 public abstract non-sealed class Person extends BaseEntity {
+
     @Embedded
     private Name name;
 
@@ -17,9 +18,7 @@ public abstract non-sealed class Person extends BaseEntity {
     @AttributeOverrides({
             @AttributeOverride(name = "firstName", column = @Column(name = "social_first_name")),
             @AttributeOverride(name = "middleName", column = @Column(name = "social_middle_name")),
-            @AttributeOverride(name = "lastName", column = @Column(name = "social_last_name"))
-    }
-    )
+            @AttributeOverride(name = "lastName", column = @Column(name = "social_last_name"))})
     private Name socialName;
 
     @Column(name = "email", nullable = false, length = 60)

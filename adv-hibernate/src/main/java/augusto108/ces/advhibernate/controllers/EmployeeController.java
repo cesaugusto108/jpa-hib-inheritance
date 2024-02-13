@@ -3,6 +3,7 @@ package augusto108.ces.advhibernate.controllers;
 import augusto108.ces.advhibernate.domain.entities.Employee;
 import augusto108.ces.advhibernate.domain.entities.Person;
 import augusto108.ces.advhibernate.services.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +13,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
+
     private final PersonService service;
 
+    @Autowired
     public EmployeeController(PersonService service) {
         this.service = service;
     }

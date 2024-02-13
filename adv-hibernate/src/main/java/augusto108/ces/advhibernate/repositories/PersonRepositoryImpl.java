@@ -5,14 +5,17 @@ import augusto108.ces.advhibernate.domain.entities.Instructor;
 import augusto108.ces.advhibernate.domain.entities.Person;
 import augusto108.ces.advhibernate.domain.entities.Student;
 import jakarta.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public class PersonRepositoryImpl implements PersonRepository {
+
     private final EntityManager entityManager;
 
+    @Autowired
     public PersonRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }

@@ -5,6 +5,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Name {
+
     @Column(name = "first_name", length = 20)
     private String firstName;
 

@@ -8,6 +8,7 @@ import augusto108.ces.advhibernate.domain.entities.Student;
 import java.util.List;
 
 public interface PersonRepository {
+
     void persistPerson(Person person);
 
     List<Student> getStudents(int page, int max);

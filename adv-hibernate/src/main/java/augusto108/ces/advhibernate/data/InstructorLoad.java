@@ -10,6 +10,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource("classpath:sample-instructor.properties")
 public class InstructorLoad {
+
     @Value("${instructor.first-name}")
     private String firstName;
 
@@ -40,7 +41,6 @@ public class InstructorLoad {
 
     public Instructor createInstructor() {
         final Name name = new Name(firstName, middleName, lastName);
-
         return new Instructor(name, name, email, specialty);
     }
 
