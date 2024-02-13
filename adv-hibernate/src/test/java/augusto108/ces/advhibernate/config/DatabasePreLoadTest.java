@@ -26,23 +26,23 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 @ActiveProfiles("databasetest")
 class DatabasePreLoadTest {
-    @Autowired
-    private PersonService personService;
+
+    private final PersonService personService;
+    private final TelephoneService telephoneService;
+    private final StudentLoad studentLoad;
+    private final InstructorLoad instructorLoad;
+    private final EmployeeLoad employeeLoad;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private TelephoneService telephoneService;
-
-    @Autowired
-    private StudentLoad studentLoad;
-
-    @Autowired
-    private InstructorLoad instructorLoad;
-
-    @Autowired
-    private EmployeeLoad employeeLoad;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    DatabasePreLoadTest(PersonService personService, TelephoneService telephoneService, StudentLoad studentLoad, InstructorLoad instructorLoad, EmployeeLoad employeeLoad, JdbcTemplate jdbcTemplate) {
+        this.personService = personService;
+        this.telephoneService = telephoneService;
+        this.studentLoad = studentLoad;
+        this.instructorLoad = instructorLoad;
+        this.employeeLoad = employeeLoad;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @BeforeEach
     void setUp() {

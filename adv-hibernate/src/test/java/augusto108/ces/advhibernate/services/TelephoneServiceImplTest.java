@@ -18,14 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class TelephoneServiceImplTest {
-    @Autowired
-    private TelephoneService telephoneService;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final TelephoneService telephoneService;
+    private final JdbcTemplate jdbcTemplate;
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    TelephoneServiceImplTest(TelephoneService telephoneService, JdbcTemplate jdbcTemplate) {
+        this.telephoneService = telephoneService;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @BeforeEach
     void setUp() {

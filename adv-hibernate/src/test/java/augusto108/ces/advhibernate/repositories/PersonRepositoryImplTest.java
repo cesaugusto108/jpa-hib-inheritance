@@ -21,11 +21,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class PersonRepositoryImplTest {
-    @Autowired
-    private PersonRepository personRepository;
+
+    private final PersonRepository personRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    PersonRepositoryImplTest(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     @Test
     void persistPerson() {

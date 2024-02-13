@@ -17,11 +17,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class PersonServiceImplTest {
-    @Autowired
-    private PersonService personService;
+
+    private final PersonService personService;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    PersonServiceImplTest(PersonService personService, JdbcTemplate jdbcTemplate) {
+        this.personService = personService;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Test
     void persistPerson() {

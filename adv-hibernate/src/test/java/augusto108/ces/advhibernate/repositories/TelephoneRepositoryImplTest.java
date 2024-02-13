@@ -21,11 +21,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class TelephoneRepositoryImplTest {
-    @Autowired
-    private TelephoneRepository telephoneRepository;
+
+    private final TelephoneRepository telephoneRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    TelephoneRepositoryImplTest(TelephoneRepository telephoneRepository) {
+        this.telephoneRepository = telephoneRepository;
+    }
 
     @Sql("/telephones-script.sql")
     @Test

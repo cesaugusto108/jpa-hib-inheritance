@@ -12,8 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -22,18 +22,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 class InstructorControllerTest {
+
     private final String jsonContent1 = "{\"id\":102,\"name\":{\"firstName\":\"Milena\",\"middleName\":\"Freitas\",\"lastName\":\"Andrade\"}," +
             "\"socialName\":{\"firstName\":\"Milena\",\"middleName\":\"Freitas\",\"lastName\":\"Andrade\"},\"email\":\"milena@email.com\",\"telephones\":[]," +
             "\"specialty\":\"Java\"}";
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+    private final MockMvc mockMvc;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+    InstructorControllerTest(JdbcTemplate jdbcTemplate, MockMvc mockMvc, ObjectMapper objectMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.mockMvc = mockMvc;
+        this.objectMapper = objectMapper;
+    }
 
     @BeforeEach
     void setUp() {
@@ -72,7 +75,6 @@ class InstructorControllerTest {
 
         final String json = result.getResponse().getContentAsString();
         final Instructor instructor = objectMapper.readValue(json, Instructor.class);
-
         assertEquals("Milena Freitas Andrade (Java)", instructor.toString());
     }
 }
